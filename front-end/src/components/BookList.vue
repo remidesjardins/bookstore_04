@@ -2,15 +2,22 @@
   <div>
     <h3>Books</h3>
     <div class="book-list">
-      <div v-for="book in bookList" :key="book.id" class="book" @click="selectBook(book)">
-        <img :src="book.img" alt="book cover" />
-        <div class="book-id">{{ book.id }}</div>
-        <div class="book-title">{{ book.title }}</div>
-        <div class="book-price">{{ book.price }} $</div>
-        <div class="favorite-icon" :class="{ added: book.isFavorite }" @click.stop="toggleFavorite(book)">
-          {{ book.isFavorite ? '★' : '☆' }}
+      <div class="book-list-container">
+        <button @click="slideLeft">‹</button>
+        <div class="book-slider" ref="bookSlider">
+          <div v-for="book in bookList" :key="book.id" class="book" @click="selectBook(book)">
+            <img :src="book.img" alt="book cover" />
+            <div class="book-id">{{ book.id }}</div>
+            <div class="book-title">{{ book.title }}</div>
+            <div class="book-price">{{ book.price }} $</div>
+            <div class="favorite-icon" :class="{ added: book.isFavorite }" @click.stop="toggleFavorite(book)">
+              {{ book.isFavorite ? '★' : '☆' }}
+            </div>
+          </div>
         </div>
+        <button @click="slideRight">›</button>
       </div>
+
     </div>
   </div>
 </template>
@@ -24,12 +31,32 @@ export default {
     },
     toggleFavorite(book) {
       this.$emit('toggleFavorite', book);  // Emit favorite toggle event
-    }
+    },
+    slideLeft() {
+      this.$refs.bookSlider.scrollLeft -= 200; // Adjust scroll value as needed
+    },
+    slideRight() {
+      this.$refs.bookSlider.scrollLeft += 200;
+    },
   }
 };
 </script>
 
 <style scoped>
+
+.book-list-container {
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  position: relative;
+}
+
+.book-slider {
+  display: flex;
+  overflow-x: scroll;
+  scroll-behavior: smooth;
+  gap: 16px; /* Adjust spacing between items */
+}
 .book-list {
   display: flex;
   flex-wrap: wrap;
@@ -37,7 +64,8 @@ export default {
 }
 
 .book {
-  width: 220px;
+  min-width: 200px;
+  max-width: 200px;
   height: 250px;
   margin: 20px;
   text-align: center;

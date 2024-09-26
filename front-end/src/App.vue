@@ -65,6 +65,27 @@ export default {
           summary: "Bilbo's adventure...",
           isFavorite: false
         },
+        {
+          id: "B-123-456",
+          title: "The Hobbit",
+          author: "J.R.R. Tolkien",
+          img: "https://covers.openlibrary.org/b/isbn/9780618968633-M.jpg",
+          price: 15,
+          category: "Fantasy",
+          summary: "Bilbo's adventure...",
+          isFavorite: false
+        },
+        {
+          id: "B-123-456",
+          title: "The Hobbit",
+          author: "J.R.R. Tolkien",
+          img: "https://covers.openlibrary.org/b/isbn/9780618968633-M.jpg",
+          price: 15,
+          category: "Fantasy",
+          summary: "Bilbo's adventure...",
+          isFavorite: false
+        },
+
         // Add more books here
       ],
       categories: ["Science-Fiction", "Mystery & Thriller", "Children's books", "Historical", "Educational"],

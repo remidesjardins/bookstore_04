@@ -1,6 +1,5 @@
 const sql = require('mysql2/promise');
 const dbconf = require('../database/connection');
-const bcrypt = require("bcrypt");
 
 exports.GetAllBook = async (req, res, next) => {
 

@@ -1,6 +1,7 @@
 const sql = require('mysql2/promise');
 const dbconf = require('../database/connection');
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 
 
 exports.GetAllUser = async (req, res, next) => {
@@ -123,5 +124,41 @@ exports.DeleteUser = async (req, res, next) => {
         res.status(400).send({error: err});
     }
 
+
+}
+
+exports.LoginUser = async (req, res, next) => {
+    const {email, password} = req.body;
+
+
+    try {
+        const connection = await sql.createConnection(dbconf);
+        const [result] = await connection.execute('SELECT * FROM users WHERE email = ?', [email]);
+
+
+        await connection.end();
+
+        if(!result){
+            res.status(404).json({message:"user not found"});
+        }
+        bcrypt.compare(password, result[0].password)
+            .then(valid => {
+                if(!valid){
+                    res.status(401).json({message: 'Invalid email or password'});
+                }else{
+                    res.status(201).json({
+                        userId: result[0].user_id,
+                        token: jwt.sign({userId: result[0].user_id, roles:result[0].role}, 'test', {expiresIn: '1h'})
+                    });
+                }
+            })
+            .catch(error => res.status(500).json({error}));
+
+
+
+
+    }catch (error){
+        res.status(400).json({error})
+    }
 
 }

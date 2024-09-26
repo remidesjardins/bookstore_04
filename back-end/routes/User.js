@@ -9,5 +9,6 @@ router.get('/:id', UserCtrl.GetOneUser);
 router.post('/', UserCtrl.CreateUser);
 router.put('/:id', UserCtrl.UpdateUser);
 router.delete('/:id', UserCtrl.DeleteUser);
+router.post('/login', UserCtrl.LoginUser);
 
 module.exports = router;

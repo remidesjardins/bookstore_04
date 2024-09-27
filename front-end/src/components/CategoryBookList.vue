@@ -54,7 +54,7 @@ export default {
   height: 100%;
   background-color: rgba(255, 255, 255, 1);
   color: black;
-  z-index: 1000;
+  z-index: 998;
   padding: 20px;
   box-sizing: border-box;
   overflow-y: auto;

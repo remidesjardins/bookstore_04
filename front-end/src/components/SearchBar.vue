@@ -6,7 +6,6 @@
         @input="$emit('update:searchQuery', $event.target.value)"
         placeholder="Search for a book..."
     />
-    <button @click="searchBook">🔍</button>
   </div>
 </template>
 
@@ -28,7 +27,19 @@ export default {
 
 <style scoped>
 .search-bar {
-  display: flex;
-  align-items: center;
+  flex-grow: 1;
+  margin: 0 20px;
 }
-</style>s
+.search-bar input {
+  width: 90%;
+  padding: 10px;
+  font-size: 16px;
+  border: 2px solid black;
+  border-radius: 30px;
+  background: #d9a05b;
+}
+.search-bar input::placeholder {
+  color: black;
+}
+
+</style>

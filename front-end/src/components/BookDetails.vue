@@ -8,7 +8,7 @@
         <h1 class="book-title">{{ book.title }}</h1>
         <h3>By {{ book.author }}</h3>
         <span class="category-label">{{ book.category }}</span>
-        <img :src="book.img" alt="Book cover" />
+        <img :src="getBookCover(book.isbn)" alt="Book cover" />
         <div class="price-button-container">
           <p class="price">{{ book.price }} $</p>
           <p
@@ -29,8 +29,8 @@
 
       <!-- Action icons (Modify and Delete) -->
       <div class="action-icons">
-        <i @click="openUpdateForm">♻️</i> <!-- Modify icon -->
-        <i @click="deleteBook">🗑️</i> <!-- Delete icon -->
+        <i @click="openUpdateForm">♻️</i>
+        <i @click="deleteBook">🗑️</i>
       </div>
     </div>
   </div>
@@ -54,7 +54,7 @@ export default {
     visible: Boolean,
     categories: Array
   },
-  emits: ['close', 'favoriteToggled'], // Declare the events that the component emits
+  emits: ['close', 'favoriteToggled'],
   data() {
     return {
       showUpdateForm: false
@@ -76,11 +76,18 @@ export default {
       this.closeDetails();
     },
     closeDetails() {
-      this.$emit('close'); // Emit close event
+      this.$emit('close');
     },
     toggleFavorite() {
-      this.$emit('favoriteToggled', this.book); // Emit favorite toggled event
-    }
+      this.$emit('favoriteToggled', this.book);
+    },
+    getBookCover(isbn) {
+      if (isbn){
+        const isbnString = String(isbn);
+        return `https://covers.openlibrary.org/b/isbn/${isbnString}-M.jpg`;
+      }
+      return "https://via.placeholder.com/150?text=No+Cover";
+    },
   },
   components: {
     UpdateBookForm

@@ -4,9 +4,9 @@
     <div class="book-list">
       <div class="book-list-container">
         <button @click="slideLeft">‹</button>
-        <div class="book-slider" ref="bookSlider">
+        <div v-if="!isEmpty" class="book-slider" ref="bookSlider">
           <div v-for="book in bookList" :key="book.id" class="book" @click="selectBook(book)">
-            <img :src="book.img" alt="book cover" />
+            <img :src="getBookCover(book.isbn)" alt="book cover" />
             <div class="book-id">{{ book.id }}</div>
             <div class="book-title">{{ book.title }}</div>
             <div class="book-price">{{ book.price }} $</div>
@@ -15,9 +15,13 @@
             </div>
           </div>
         </div>
+        <div v-else>
+          <div class="book">
+            <div class="book-title" id="empty-title">Oups… <br/>Nothing here yet</div>
+          </div>
+        </div>
         <button @click="slideRight">›</button>
       </div>
-
     </div>
   </div>
 </template>
@@ -27,6 +31,7 @@ export default {
   props: {
     ['bookList']: Array,
     "text": String,
+    isEmpty: Boolean,
   },
   methods: {
     selectBook(book) {
@@ -40,6 +45,13 @@ export default {
     },
     slideRight() {
       this.$refs.bookSlider.scrollLeft += 250;
+    },
+    getBookCover(isbn) {
+      if (isbn){
+        const isbnString = String(isbn);
+        return `https://covers.openlibrary.org/b/isbn/${isbnString}-M.jpg`;
+      }
+      return "https://via.placeholder.com/150?text=No+Cover";
     },
   }
 };
@@ -58,8 +70,9 @@ export default {
   display: flex;
   overflow-x: scroll;
   scroll-behavior: smooth;
-  gap: 16px; /* Adjust spacing between items */
+  gap: 16px;
 }
+
 .book-list {
   display: flex;
   flex-wrap: wrap;
@@ -129,4 +142,8 @@ export default {
 .favorite-icon.added {
   color: red;
 }
-</style>s
+#empty-title {
+  font-size: 28px;
+  font-weight: bold;
+}
+</style>

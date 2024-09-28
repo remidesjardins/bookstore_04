@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h3>Books</h3>
+    <h2>{{ this.text }}</h2>
     <div class="book-list">
       <div class="book-list-container">
         <button @click="slideLeft">‹</button>
@@ -24,19 +24,22 @@
 
 <script>
 export default {
-  props: ['bookList'],  // Ensure bookList is passed as a prop
+  props: {
+    ['bookList']: Array,
+    "text": String,
+  },
   methods: {
     selectBook(book) {
-      this.$emit('bookSelected', book);  // Emit bookSelected event
+      this.$emit('bookSelected', book);
     },
     toggleFavorite(book) {
-      this.$emit('toggleFavorite', book);  // Emit favorite toggle event
+      this.$emit('toggleFavorite', book);
     },
     slideLeft() {
-      this.$refs.bookSlider.scrollLeft -= 200; // Adjust scroll value as needed
+      this.$refs.bookSlider.scrollLeft -= 250;
     },
     slideRight() {
-      this.$refs.bookSlider.scrollLeft += 200;
+      this.$refs.bookSlider.scrollLeft += 250;
     },
   }
 };
@@ -64,19 +67,18 @@ export default {
 }
 
 .book {
-  min-width: 200px;
-  max-width: 200px;
+  min-width: 250px;
+  max-width: 250px;
   height: 250px;
   margin: 20px;
   text-align: center;
   padding: 10px;
-  border: 1px solid blue;
   border-radius: 20px;
   cursor: pointer;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  background-color: #f0f0f0;
+  background-color: #d9d9d9;
   position: relative;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   transition: transform 0.2s ease;
@@ -118,7 +120,7 @@ export default {
   position: absolute;
   bottom: 10px;
   right: 10px;
-  font-size: 20px;
+  font-size: 30px;
   cursor: pointer;
   color: black;
   transition: color 0.2s ease;

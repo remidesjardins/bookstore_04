@@ -1,5 +1,5 @@
 <template>
-  <div class="overlay" @click.self="closeDetails" v-if="visible">
+  <div class="overlay" @click.self="closeDetails">
     <div class="book-details" @click.stop>
       <span class="close-button" @click="closeDetails">❌</span>
 
@@ -63,7 +63,7 @@ export default {
   methods: {
     openUpdateForm() {
       this.showUpdateForm = true;
-    },
+     },
     closeUpdateForm() {
       this.showUpdateForm = false;
     },
@@ -89,6 +89,7 @@ export default {
 </script>
 
 <style scoped>
+/* Overlay Styles */
 .overlay {
   display: flex;
   justify-content: center;

@@ -18,11 +18,11 @@ exports.GetAllFavorites = async (req, res, next) => {
 
 exports.GetOneFavorite = async (req, res, next) => {
 
-    const id = req.params.id;
+    const user_id = req.params.id;
 
     try{
         const connection = await sql.createConnection(dbconf);
-        const [result] = await connection.execute('SELECT * FROM favorites WHERE favorite_id = ?',[id]);
+        const [result] = await connection.execute('SELECT books.* FROM books JOIN favorites ON books.book_id = favorites.book_id WHERE favorites.user_id = ?',[user_id]);
         await connection.end();
         res.status(200).json(result);
     }catch (error){

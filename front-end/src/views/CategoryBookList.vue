@@ -1,19 +1,22 @@
 <template>
-  <div v-if="showPopup" class="category-popup">
+  <Header v-model:searchQuery="searchQuery" @search="updateSearchQuery" @showAddBookForm="showAddBookForm" />
+  <div class="category-popup">
     <span class="close-button" @click="closePopup">❌</span>
     <h3>Books in {{ category }}</h3>
-    <BookList :bookList="filteredBooks" @bookSelected="showBookDetailsOverlay" @toggleFavorite="toggleFavorite" />
+    <BookList :bookList="filteredBook" @bookSelected="showBookDetailsOverlay" @toggleFavorite="toggleFavorite" />
   </div>
 </template>
 
 <script>
-import BookList from './BookList.vue';  // Ensure BookList is imported correctly
+import BookList from '../components/BookList.vue';  // Ensure BookList is imported correctly
+import Header from '../components/Header.vue';
 
 export default {
-  props: ['books', 'category', 'showPopup'],
+  props: ['category'],
   data() {
     return {
-      filteredBooks: []
+      filteredBooks: [],
+      searchQuery: "",
     };
   },
   watch: {
@@ -33,14 +36,29 @@ export default {
       }
     },
     closePopup() {
-      this.$emit('closePopup');
+      this.$router.push('/');
     },
     showBookDetailsOverlay(book) {
       this.$emit('bookSelected', book);  // Emit the bookSelected event when a book is clicked
     }
   },
+  computed: {
+    books(){
+      return this.$store.getters.getBooks;
+    },
+    filteredBook() {
+      if (this.searchQuery.trim() === "") {
+        return this.filteredBooks;
+      }
+      return this.filteredBooks.filter(book => {
+        return book.title.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
+            book.id.toLowerCase().includes(this.searchQuery.toLowerCase());
+      });
+    },
+  },
   components: {
-    BookList
+    BookList,
+    Header
   }
 };
 </script>
@@ -48,10 +66,8 @@ export default {
 <style scoped>
 .category-popup {
   position: fixed;
-  top: 0;
-  left: 0;
   width: 100%;
-  height: 100%;
+  height: auto;
   background-color: rgba(255, 255, 255, 1);
   color: black;
   z-index: 998;

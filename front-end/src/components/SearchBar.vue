@@ -3,7 +3,7 @@
     <input
         type="text"
         :value="searchQuery"
-        @input="$emit('update:searchQuery', $event.target.value)"
+        @input="emitSearch($event.target.value)"
         placeholder="Search for a book..."
     />
   </div>
@@ -11,15 +11,21 @@
 
 <script>
 export default {
-  props: {
-    searchQuery: {
-      type: String,
-      required: true
+  props: ["searchQuery"],
+  methods: {
+    emitSearch(query) {
+      this.$emit("search", query);
     }
   },
-  methods: {
-    searchBook() {
-      this.$emit('search-book');
+  components: {
+    filteredBooks() {
+      if (this.searchQuery.trim() === "") {
+        return this.books;
+      }
+      return this.books.filter(book => {
+        return book.title.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
+            book.id.toLowerCase().includes(this.searchQuery.toLowerCase());
+      });
     }
   }
 };

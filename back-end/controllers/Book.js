@@ -32,7 +32,7 @@ exports.GetOneBook = async (req, res, next) => {
 }
 
 exports.CreateBook = async (req, res, next) => {
-    const { title, author, cover_image, category, summary, isbn } = req.body;
+    const { title, author, cover_image, category, summary, isbn, price } = req.body;
 
 
 
@@ -42,8 +42,8 @@ exports.CreateBook = async (req, res, next) => {
         try {
             const connection = await sql.createConnection(dbconf);
             const [result] = await connection.execute(
-                'INSERT INTO books (title, author, cover_image, category, summary, isbn) VALUES( ?, ?, ?, ?, ?, ?)',
-                [title, author, cover_image, category, summary, isbn]
+                'INSERT INTO books (title, author, cover_image, category, summary, isbn, price) VALUES( ?, ?, ?, ?, ?, ?, ?)',
+                [title, author, cover_image, category, summary, isbn, price]
             )
 
             await connection.end();
@@ -62,7 +62,7 @@ exports.CreateBook = async (req, res, next) => {
 exports.UpdateBook = async (req, res, next) => {
 
     const id = req.params.id;
-    const { title, author, cover_image, category, summary , isbn} = req.body;
+    const { title, author, cover_image, category, summary , isbn, price} = req.body;
 
 
 
@@ -72,8 +72,8 @@ exports.UpdateBook = async (req, res, next) => {
         try {
             const connection = await sql.createConnection(dbconf);
             const [result] = await connection.execute(
-                'UPDATE books SET title = ?, author = ?, cover_image = ?, category = ?, summary = ?, isbn = ? WHERE book_id = ?',
-                [title, author, cover_image, category, summary, isbn, id]
+                'UPDATE books SET title = ?, author = ?, cover_image = ?, category = ?, summary = ?, isbn = ?, price = ? WHERE book_id = ?',
+                [title, author, cover_image, category, summary, isbn, price, id]
             );
 
 

@@ -1,8 +1,8 @@
 import { createStore } from 'vuex';
 
-export const store = createStore({
+const store = createStore({
     state: {
-        isAuthenticated: !!localStorage.getItem('authToken'),
+        isAuthenticated: true,
         userToken: localStorage.getItem('authToken')
     },
     mutations: {
@@ -46,3 +46,5 @@ export const store = createStore({
         },
     },
 });
+
+export default store;

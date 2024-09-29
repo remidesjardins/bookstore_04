@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import store from '@/Store'
 import Home from '../views/Home.vue'
 import CategoryBookList from '../views/CategoryBookList.vue'
 import Favorites from "@/views/Favorites.vue";
@@ -53,7 +54,6 @@ const router = createRouter({
 
 router.beforeEach((to, from, next) => {
     const requiresAuth = to.matched.some(record => record.meta.requiresAuth);
-
     if (requiresAuth && !store.state.isAuthenticated) {
         // L'utilisateur n'est pas authentifié
         next('/login'); // Redirige vers la page de connexion

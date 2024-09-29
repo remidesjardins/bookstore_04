@@ -12,12 +12,15 @@
       <span class="bar"></span>
     </div>
 
-    <SearchBar :searchQuery="searchQuery" @search="searchBook" />
+    <SearchBar :searchQuery="searchQuery" @search="emitSearchQuery" />
 
     <div class="header-icons" :class="{ 'mobile-menu': isMenuOpen }">
-      <div class="add-book" @click.stop="showAddBookForm">Add a book <span class="icon">+</span></div>
-      <div class="logout">Log Out <span class="icon">➡️</span></div>
-      <div class="favorite">Favorite <span class="icon">⭐</span></div>
+      <div class="add-book" @click.stop="showAddBookForm">
+        Add a book <span class="icon"><i class="fas fa-plus fa-sm"></i></span></div>
+      <div class="logout" @click="logOut">
+        Log Out <span class="icon"></span><i class="fas fa-sign-out-alt fa-lg"></i></div>
+      <div class="favorite">
+        Favorite <span class="icon"> <i class="fas fa-star fa-sm"></i> </span></div>
     </div>
   </header>
 </template>
@@ -26,12 +29,13 @@
 import SearchBar from "./SearchBar.vue";
 
 export default {
+  props: ['searchQuery'],
   data() {
     return {
-      isMenuOpen: false
+      isMenuOpen: false,
+      books: [],
     };
   },
-  props: ["searchQuery"],
   methods: {
     searchBook(query) {
       this.$emit("update:searchQuery", query);
@@ -41,6 +45,12 @@ export default {
     },
     toggleMenu() {
       this.isMenuOpen = !this.isMenuOpen;
+    },
+    emitSearchQuery(query) {
+      this.$emit("search", query);
+    },
+    logOut(){
+      this.$store.dispatch("logout");
     }
   },
   components: {
@@ -72,6 +82,7 @@ export default {
 .header-icons {
   display: flex;
   align-items: center;
+  gap: 20px;
 }
 
 .hamburger {
@@ -112,7 +123,6 @@ export default {
   margin: 10px 0;
   font-size: 20px;
   padding: 10px 0;
-  border-bottom: 1px solid black;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -128,6 +138,11 @@ export default {
     flex-direction: column;
   }
 
+  .header-icons .add-book,
+  .header-icons .logout,
+  .header-icons .favorite{
+    border-bottom: 1px solid black;
+  }
   .hamburger {
     display: flex;
     position: absolute;
@@ -137,6 +152,7 @@ export default {
 
   .header-icons {
     display: none;
+    padding: 10px;
   }
 
   .header-icons.mobile-menu {

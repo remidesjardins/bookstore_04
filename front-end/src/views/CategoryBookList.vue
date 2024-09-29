@@ -1,65 +1,74 @@
 <template>
-  <Header v-model:searchQuery="searchQuery" @search="updateSearchQuery" @showAddBookForm="showAddBookForm" />
+  <Header :searchQuery="searchQuery" @search="handleSearch" />
   <div class="category-popup">
     <span class="close-button" @click="closePopup">❌</span>
     <h3>Books in {{ category }}</h3>
-    <BookList :bookList="filteredBook" @bookSelected="showBookDetailsOverlay" @toggleFavorite="toggleFavorite" />
+    <BookList :bookList="filteredBooks" @bookSelected="showBookDetailsOverlay"/>
   </div>
 </template>
 
 <script>
-import BookList from '../components/BookList.vue';  // Ensure BookList is imported correctly
 import Header from '../components/Header.vue';
+import BookList from '../components/BookList.vue';
 
 export default {
-  props: ['category'],
   data() {
     return {
+      books: [],
       filteredBooks: [],
       searchQuery: "",
+      selectedCategory: this.$route.params.category, // Get category from route params
     };
   },
-  watch: {
-    category: 'filterBooksByCategory',
-    books: 'filterBooksByCategory'
-  },
-  mounted() {
-    this.filterBooksByCategory();
+  computed: {
+    filteredBooks() {
+      if (this.searchQuery.trim() === "") {
+        return this.books.filter(book => book.category === this.selectedCategory);
+      }
+      return this.books.filter(book =>
+          book.category === this.selectedCategory &&
+          (book.title.toLowerCase().includes(this.searchQuery.toLowerCase()) || book.book_id.toString().includes(this.searchQuery.toLowerCase()))
+      );
+    },
   },
   methods: {
-    filterBooksByCategory() {
-      console.log("All Books:", this.books);
-      console.log("Selected Category:", this.category);
-      if (this.books && Array.isArray(this.books)) {
-        this.filteredBooks = this.books.filter(book => book.category === this.category);
-        console.log("Filtered Books:", this.filteredBooks);
-      }
+    fetchBooks() {
+      const myHeaders = new Headers();
+      myHeaders.append("Content-Type", "application/json");
+      const requestOptions = {
+        method: "GET",
+        headers: myHeaders,
+        redirect: "follow",
+      };
+
+      fetch("http://https://bot.servhub.fr/api/books", requestOptions)
+          .then((response) => response.json())
+          .then((result) => {
+            this.books = result;
+          })
+          .catch((error) => console.error(error));
+    },
+    handleSearch(query) {
+      this.searchQuery = query;
+    },
+    showBookDetailsOverlay(book) {
+      // Handle the display of the book details
+      this.$emit('bookSelected', book);
     },
     closePopup() {
       this.$router.push('/');
     },
-    showBookDetailsOverlay(book) {
-      this.$emit('bookSelected', book);  // Emit the bookSelected event when a book is clicked
-    }
+    searchTitle() {
+      return this.searchQuery.trim() === "" ? "Recent search" : "Search Result";
+    },
   },
-  computed: {
-    books(){
-      return this.$store.getters.getBooks;
-    },
-    filteredBook() {
-      if (this.searchQuery.trim() === "") {
-        return this.filteredBooks;
-      }
-      return this.filteredBooks.filter(book => {
-        return book.title.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
-            book.id.toLowerCase().includes(this.searchQuery.toLowerCase());
-      });
-    },
+  mounted() {
+    this.fetchBooks();
   },
   components: {
-    BookList,
-    Header
-  }
+    Header,
+    BookList
+  },
 };
 </script>
 
@@ -68,23 +77,18 @@ export default {
   position: fixed;
   width: 100%;
   height: auto;
-  background-color: rgba(255, 255, 255, 1);
-  color: black;
-  z-index: 998;
+  background-color: rgba(255, 255, 255, 0.9);
   padding: 20px;
-  box-sizing: border-box;
-  overflow-y: auto;
+  top: 50px;
+  left: 0;
+  right: 0;
+  z-index: 999;
 }
 
 .close-button {
   position: absolute;
-  top: 20px;
-  right: 20px;
+  top: 10px;
+  right: 10px;
   cursor: pointer;
-  font-size: 24px;
-  background: white;
-  color: black;
-  padding: 5px 10px;
-  border-radius: 50%;
 }
 </style>

@@ -17,16 +17,18 @@ export default {
       this.$emit("search", query);
     }
   },
-  components: {
+  computed: {
     filteredBooks() {
+      console.log("Test SearchBar");
+      // Only return books that match the search query
       if (this.searchQuery.trim() === "") {
         return this.books;
       }
       return this.books.filter(book => {
         return book.title.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
-            book.id.toLowerCase().includes(this.searchQuery.toLowerCase());
+            book.book_id.toString().includes(this.searchQuery.toLowerCase());
       });
-    }
+    },
   }
 };
 </script>

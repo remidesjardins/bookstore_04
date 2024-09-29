@@ -1,6 +1,7 @@
 <template>
   <div>
-    <Header v-model:searchQuery="searchQuery" @search="updateSearchQuery" @showAddBookForm="showAddBookForm" />
+    <Header :searchQuery="searchQuery" @search="handleSearch" @showAddBookForm="showAddBookForm" />
+
     <BookList
         :bookList="filteredBooks"
         @bookSelected="showBookDetailsOverlay"
@@ -38,7 +39,7 @@ export default {
     return {
       searchQuery: "",
       books: [],
-      categories: ["Science-Fiction", "Mystery & Thriller", "Children's books", "Historical", "Educational"],
+      categories: ["Science Fiction", "Mystery & Thriller", "Children's books", "Historical", "Educational"],
       selectedCategory: "",
       showCategoryPopup: false,
       showDetails: false,
@@ -52,14 +53,14 @@ export default {
   computed: {
     filteredBooks() {
       if (this.searchQuery.trim() === "") {
-        return this.$store.getters.getBooks;
+        return this.books; // If no search query, return all books
       }
-      return this.$store.getters.getBooks.filter(book => {
+      return this.books.filter(book => {
         return book.title.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
-            book.id.toLowerCase().includes(this.searchQuery.toLowerCase());
+            book.book_id.toString().includes(this.searchQuery.toLowerCase());
       });
     },
-    searchTitle(){
+    searchTitle() {
       return this.searchQuery.trim() === "" ? "Recent search" : "Search Result";
     },
   },
@@ -73,18 +74,18 @@ export default {
         redirect: "follow"
       };
 
-      fetch("http://localhost:3000/api/books", requestOptions)
+      fetch("https://bot.servhub.fr/api/books", requestOptions)
           .then((response) => response.json())
           .then((result) => {console.log(result)
-            return result;
+            this.books = result;
           })
           .catch((error) => console.error(error));
     },
     openCategoryPopup(category) {
       this.selectedCategory = category;
       this.$router.push({
-        name: 'category',
-        params: {category: `${category}`},
+        name: 'category',  // Assuming the route name is 'category'
+        params: { category: `${category}` },
       });
     },
     showBookDetailsOverlay(book) {
@@ -114,9 +115,15 @@ export default {
     updateSearchQuery(query) {
       this.searchQuery = query;
     },
+    handleSearch(query) {
+      this.searchQuery = query;
+    }
   },
   mounted() {
     this.fetchBooks();
+    this.polling = setInterval(() => {
+      this.fetchBooks();
+    }, 5000);
   },
   components: {
     Header,
@@ -176,28 +183,6 @@ input[type="text"] {
 
 .action-icons i:hover {
   color: red;
-}
-
-.app-header {
-  background-color: #d9a05b; /* Matching the background color from the image */
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 50px 20px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-}
-
-.logo {
-  font-size: 30px;
-  padding: 20px;
-  font-weight: bold;
-  color: black;
-  line-height: 1;
-}
-
-.header-icons {
-  display: flex;
-  align-items: center;
 }
 
 .header-icons .add-book,

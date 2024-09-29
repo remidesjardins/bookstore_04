@@ -1,135 +1,194 @@
 <template>
-  <div class="overlay" v-if="book" @click.self="closeForm">
-    <div class="update-details" @click.stop>
-      <span class="close-button" @click="closeForm">❌</span>
-      <div class="update-form">
-        <h1>Update Book</h1>
-        <input type="text" placeholder="Title" v-model="book.title" />
-        <input type="text" placeholder="Author" v-model="book.author" />
-        <input type="text" placeholder="Reference" v-model="book.id" />
-        <input type="text" placeholder="Price in $" v-model="book.price" />
-
-        <!-- Drop-down for selecting one category -->
-        <label for="category">Category</label>
-        <select v-model="book.category" id="category">
-          <option disabled value="">Please select a category</option>
-          <!-- Dynamically render categories as options with proper key and value bindings -->
-          <option v-for="category in categories" :key="category" :value="category">
-            {{ category }}
-          </option>
-        </select>
-
-
-        <button @click="updateBook">Update Book</button>
-      </div>
+  <div class="add-book-form">
+    <div class="form-header">
+      <h2>Update Book</h2>
+      <button @click="$emit('close')" class="close-btn">✖</button>
     </div>
+
+    <form @submit.prevent="updateBook">
+      <!-- Title and Author on the same line -->
+      <div class="form-row">
+        <div class="form-group">
+          <label for="title">Title</label>
+          <input type="text" id="title" v-model="book.title" placeholder="Enter book title" required />
+        </div>
+
+        <div class="form-group">
+          <label for="author">Author</label>
+          <input type="text" id="author" v-model="book.author" placeholder="Enter author name" required />
+        </div>
+      </div>
+
+      <!-- ISBN, Price, and Category on the same line -->
+      <div class="form-row">
+        <div class="form-group">
+          <label for="isbn">ISBN</label>
+          <input type="text" id="isbn" v-model="book.isbn" placeholder="Enter ISBN" required />
+        </div>
+
+        <div class="form-group">
+          <label for="price">Price</label>
+          <input type="number" id="price" v-model="book.price" placeholder="Enter price" required />
+        </div>
+
+        <div class="form-group">
+          <label for="category">Category</label>
+          <select id="category" v-model="book.category" required>
+            <option v-for="category in categories" :key="category" :value="category">{{ category }}</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Larger Summary text area -->
+      <div class="form-group">
+        <label for="summary">Summary</label>
+        <textarea id="summary" v-model="book.summary" placeholder="Enter book summary" required></textarea>
+      </div>
+
+      <!-- Hidden input for cover_image -->
+      <input type="hidden" v-model="book.cover_image" />
+
+      <button type="submit" class="submit-btn">Update Book</button>
+    </form>
   </div>
 </template>
 
 <script>
 export default {
-  props: ["book", "categories"],
+  props: ['bookId'],
+  data() {
+    return {
+      book: {
+        title: '',
+        author: '',
+        isbn: '',
+        price: '',
+        category: '',
+        summary: '',
+        cover_image: 'https://via.placeholder.com/150?text=No+Cover'
+      },
+      categories: ["Science-Fiction", "Mystery & Thriller", "Children's books", "Historical", "Educational"]
+    };
+  },
+  mounted() {
+    // Fetch the current book details
+    this.fetchBookDetails();
+  },
   methods: {
-    closeForm() {
-      this.$emit("closeForm");
+    async fetchBookDetails() {
+      try {
+        const response = await fetch(`https://bot.servhub.fr/api/books/${this.bookId}`);
+        const data = await response.json();
+
+        if (data && data[0]) {
+          this.book = { ...this.book, ...data[0] }; // Merge the fetched data into the form fields
+        }
+      } catch (error) {
+        console.error("Error fetching book details:", error);
+      }
     },
-    updateBook() {
-      this.$emit("updateBook", this.book);
+    async updateBook() {
+      try {
+        // Ensure all required fields are populated
+        if (!this.book.title || !this.book.author || !this.book.cover_image || !this.book.category || !this.book.summary || !this.book.isbn) {
+          alert("All fields must be filled out.");
+          return;
+        }
+
+        const response = await fetch(`https://bot.servhub.fr/api/books/${this.bookId}`, {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(this.book),
+        });
+
+        const result = await response.json();
+        if (response.ok) {
+          alert(`Book "${this.book.title}" updated successfully!`);
+          this.$emit('close');  // Close the form after submission
+        } else {
+          alert("Error updating book: " + result.message);
+        }
+      } catch (error) {
+        console.error("Error updating book:", error);
+      }
     }
   }
 };
-</script>
+</script>s
 
 <style scoped>
-.overlay {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
-  z-index: 999;
-}
-
-.update-details {
-  background-color: white;
-  border-radius: 10px;
+.add-book-form {
+  background: white;
   padding: 20px;
-  max-width: 900px;
-  max-height: 90vh;
-  width: 900px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  align-items: flex-start;
+  border-radius: 10px;
+  width: 100%;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   position: relative;
-  z-index: 20;
 }
 
-.update-form {
+.form-header {
   display: flex;
-  flex-direction: column;
-  width: 100%;
+  justify-content: space-between;
+  align-items: center;
 }
 
-.update-form input[type="text"],
-.update-form select {
-  width: 100%;
-  padding: 10px;
-  margin-bottom: 10px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  font-size: 16px;
+.close-btn {
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  color: gray;
 }
 
-.update-form label {
+/* Flexbox for rows */
+.form-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 15px;
+}
+
+.form-group {
+  flex: 1;
+  margin-right: 15px;
+}
+
+.form-group:last-child {
+  margin-right: 0;
+}
+
+.form-group label {
+  display: block;
   margin-bottom: 5px;
   font-weight: bold;
 }
 
-.update-form button {
-  background-color: lightgray;
+.form-group input,
+.form-group select,
+.form-group textarea {
+  width: 95%;
+  padding: 10px;
+  border: 1px solid black;
+  border-radius: 25px;
+  font-size: 16px;
+}
+
+.form-group textarea {
+  resize: vertical;
+}
+
+.submit-btn {
   padding: 10px 20px;
-  border-radius: 10px;
+  background-color: #a6a5a5;
+  color: white;
+  border: none;
+  border-radius: 25px;
   cursor: pointer;
   font-size: 16px;
-  align-self: flex-end;
 }
 
-.close-button {
-  position: absolute;
-  top: 10px;
-  right: 15px;
-  cursor: pointer;
-  font-size: 24px;
-}
-
-.update-form select {
-  appearance: none;
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  background-color: white;
-  border: 1px solid #ccc;
-  padding: 10px;
-  font-family: Arial, sans-serif;
-  border-radius: 5px;
-  cursor: pointer;
-}
-
-.update-form select:focus {
-  border-color: blue;
-  outline: none;
-}
-
-/* Add arrow icon to the select dropdown */
-.update-form select {
-  background-image: url('data:image/svg+xml;charset=UTF-8,%3Csvg xmlns%3D%22http://www.w3.org/2000/svg%22 fill%3D%22%23000000%22 height%3D%2224px%22 viewBox%3D%220 0 24 24%22 width%3D%2224px%22%3E%3Cpath d%3D%22M0 0h24v24H0V0z%22 fill%3D%22none%22/%3E%3Cpath d%3D%22M7 10l5 5 5-5H7z%22/%3E%3C/svg%3E');
-  background-repeat: no-repeat;
-  background-position: right 10px center;
-  background-size: 16px;
+.submit-btn:hover {
+  background-color: #45a049;
 }
 </style>

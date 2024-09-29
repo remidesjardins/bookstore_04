@@ -23,7 +23,7 @@
       <div class="form-row">
         <div class="form-group">
           <label for="isbn">ISBN</label>
-          <input type="text" id="isbn" v-model="book.isbn" placeholder="Enter ISBN" />
+          <input type="text" id="isbn" v-model="book.isbn" @blur="fetchBookDetails" placeholder="Enter ISBN" required />
         </div>
 
         <div class="form-group">
@@ -60,22 +60,56 @@ export default {
         isbn: '',
         price: '',
         category: '',
-        summary: ''
+        summary: '',
+        cover_image: 'https://via.placeholder.com/150?text=No+Cover'
       },
       categories: ["Science-Fiction", "Mystery & Thriller", "Children's books", "Historical", "Educational"]
     };
   },
   methods: {
-    submitForm() {
-      // Emitting the book details to the parent component
-      this.$emit('add-book', this.book);
+    async fetchBookDetails() {
+      const isbn = this.book.isbn;
+      if (isbn) {
+        try {
+          const response = await fetch(`https://www.googleapis.com/books/v1/volumes?q=isbn:${isbn}`);
+          const data = await response.json();
+          if (data.items && data.items.length > 0) {
+            const bookInfo = data.items[0].volumeInfo;
 
-      // Provide feedback and reset the form
-      alert(`Book "${this.book.title}" added successfully!`);
-      this.resetForm();
+            // Automatically fill the form
+            this.book.title = bookInfo.title || '';
+            this.book.author = bookInfo.authors ? bookInfo.authors.join(', ') : '';
+            this.book.category = bookInfo.categories ? bookInfo.categories[0] : '';
+            this.book.summary = bookInfo.description || '';
+            this.book.cover_image = bookInfo.imageLinks ? bookInfo.imageLinks.thumbnail : this.book.cover_image;
+          }
+        } catch (error) {
+          console.error("Error fetching book details:", error);
+        }
+      }
+    },
+    async submitForm() {
+      try {
+        console.log(this.book);
+        const response = await fetch("https://bot.servhub.fr/api/books", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(this.book),
+        });
 
-      // Close the form after submission
-      this.$emit('close-form');
+        const result = await response.json();
+        if (response.ok) {
+          alert(`Book "${this.book.title}" added successfully!`);
+          this.resetForm();
+          this.$emit('close-form');  // Close the form after submission
+        } else {
+          alert("Error adding book: " + result.message);
+        }
+      } catch (error) {
+        console.error("Error:", error);
+      }
     },
     resetForm() {
       this.book = {
@@ -84,7 +118,8 @@ export default {
         isbn: '',
         price: '',
         category: '',
-        summary: ''
+        summary: '',
+        cover_image: 'https://via.placeholder.com/150?text=No+Cover'
       };
     }
   }
@@ -141,12 +176,10 @@ export default {
 .form-group input,
 .form-group select,
 .form-group textarea {
-  width: 20%;
+  width: 95%;
   padding: 10px;
-  margin-bottom: 10px;
-  margin-top: 10px;
   border: 1px solid black;
-  border-radius: 25px; /* Rounded borders */
+  border-radius: 25px;
   font-size: 16px;
 }
 
@@ -156,17 +189,16 @@ export default {
   color: #434343;
 }
 
-.form-row .form-group input {
-  width: 95%;
+.form-group textarea {
+  resize: vertical;
 }
 
-/* Submit button */
 .submit-btn {
   padding: 10px 20px;
   background-color: #a6a5a5;
   color: white;
   border: none;
-  border-radius: 25px; /* Rounded button */
+  border-radius: 25px;
   cursor: pointer;
   font-size: 16px;
 }

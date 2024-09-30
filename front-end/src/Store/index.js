@@ -6,17 +6,22 @@ const store = createStore({
         isAuthenticated: !!localStorage.getItem('authToken'),
         userToken: localStorage.getItem('authToken'),
         userId: localStorage.getItem('userId'),
+        favoriteBooks: [],
     },
     mutations: {
         login(state, authToken, userId) {
             state.isAuthenticated = true;
             state.userToken = authToken;
             state.userId = userId;
+            state.favoriteBooks = [];
         },
         logout(state) {
             state.isAuthenticated = false;
             state.userToken = '';
             state.userId = undefined;
+        },
+        setFavorites(state, favoriteBooks) {  // Add mutation for setting favorite books
+            state.favoriteBooks = favoriteBooks;
         },
     },
     actions: {
@@ -44,6 +49,7 @@ const store = createStore({
                     localStorage.setItem('authToken', result.token);
                     localStorage.setItem('userId', result.userId);
                     commit("login", result.token, result.userId);
+                    await this.dispatch('fetchFavoriteBooks');
                     router.push('/');
                 } else {
                     throw new Error("Login failed");
@@ -51,6 +57,16 @@ const store = createStore({
             } catch (error) {
                 console.error("Login error:", error);
                 throw error;
+            }
+        },
+        async fetchFavoriteBooks({ state, commit }) {  // Add action to fetch favorite books
+            try {
+                const userId = state.userId;
+                const response = await fetch(`https://bot.servhub.fr/api/favorites/${userId}`);
+                const result = await response.json();
+                commit('setFavorites', result); // Commit the result to the store
+            } catch (error) {
+                console.error("Error fetching favorites:", error);
             }
         },
         logout({ commit }) {

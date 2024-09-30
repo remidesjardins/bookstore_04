@@ -63,7 +63,7 @@ export default {
         summary: '',
         cover_image: 'https://via.placeholder.com/150?text=No+Cover'
       },
-      categories: ["Science-Fiction", "Mystery & Thriller", "Children's books", "Historical", "Educational"]
+      categories: ["Science Fiction", "Mystery & Thriller", "Children's books", "Historical", "Educational"]
     };
   },
   methods: {

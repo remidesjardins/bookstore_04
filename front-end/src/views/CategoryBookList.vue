@@ -41,7 +41,7 @@ export default {
         redirect: "follow",
       };
 
-      fetch("http://https://bot.servhub.fr/api/books", requestOptions)
+      fetch("https://bot.servhub.fr/api/books", requestOptions)
           .then((response) => response.json())
           .then((result) => {
             this.books = result;

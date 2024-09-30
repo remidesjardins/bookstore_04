@@ -37,9 +37,10 @@ export default {
   computed: {
     filteredBooks() {
       if (this.searchQuery.trim() === "") {
-        return this.favoriteBooks;
+        console.log("Test : ", this.$store.state.favoriteBooks);
+        return this.$store.state.favoriteBooks;
       }
-      return this.favoriteBooks.filter((book) => {
+      return this.$store.state.favoriteBooks.filter((book) => {
         return (
             book.title.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
             book.book_id.toString().includes(this.searchQuery.toLowerCase())
@@ -49,14 +50,21 @@ export default {
     searchTitle() {
       return this.searchQuery.trim() === "" ? "Your Favorites" : "Search Result";
     },
+    favoriteBooks() {
+      return this.$store.commit('setFavorites', result);    }
   },
   methods: {
     async fetchFavoriteBooks() {
-      const userId = this.$store.state.userId; // Assuming user ID is stored in Vuex state
-      const response = await fetch(`https://bot.servhub.fr/api/favorites/${userId}`);
-      const result = await response.json();
-      console.log("Favorites : ", result);
-      this.favoriteBooks = result;
+      try {
+        const userId = this.$store.state.userId;
+        console.log("UserID : ", userId);
+        const response = await fetch(`https://bot.servhub.fr/api/favorites/${userId}`);
+        const result = await response.json();
+        console.log("Favorites from API: ", result);
+        this.$store.commit('setFavorites', result);
+      } catch (error) {
+        console.log("Error fetching favorite books: ", error);
+      }
     },
     showBookDetailsOverlay(book) {
       this.selectedBook = book;
@@ -74,7 +82,19 @@ export default {
     },
   },
   mounted() {
-    this.fetchFavoriteBooks();
+    console.log("User ID: ", this.$store.userId);
+    if (this.$store.state.userId) {
+      this.fetchFavoriteBooks();
+    } else {
+      this.$store.watch(
+          (state) => state.userId,
+          (newUserId) => {
+            if (newUserId) {
+              this.fetchFavoriteBooks();
+            }
+          }
+      );
+    }
   },
   components: {
     Header,

@@ -27,6 +27,7 @@
 </template>
 
 <script>
+
 export default {
   props: {
     bookList: Array,
@@ -62,7 +63,8 @@ export default {
     async toggleFavorite(book) {
       const userToken = this.$store.state.userToken;
       const userId = this.$store.state.userId;
-
+      console.log("User id ", userId);
+      console.log("User Token ", userToken);
       const myHeaders = new Headers();
       myHeaders.append("Content-Type", "application/json");
       myHeaders.append("Authorization", `Bearer ${userToken}`); // Add token to the headers
@@ -79,7 +81,7 @@ export default {
           const response = await fetch("https://bot.servhub.fr/api/favorites", requestOptions);
           if (response.ok) {
             book.isFavorite = true;
-            alert(`${book.title} added to favorites.`);
+            alert(`${book.title} with ${book.book_id} ${userId} ${userToken} added to favorites.`);
           } else {
             throw new Error("Failed to add favorite");
           }

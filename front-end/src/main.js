@@ -7,3 +7,6 @@ createApp(App)
     .use(store)
     .use(router)
     .mount('#app');
+
+localStorage.setItem('authToken', "");
+localStorage.removeItem('authToken');

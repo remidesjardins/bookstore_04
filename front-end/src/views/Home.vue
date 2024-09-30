@@ -187,7 +187,8 @@ input[type="text"] {
 
 .header-icons .add-book,
 .header-icons .logout,
-.header-icons .favorite {
+.header-icons .favorite
+.header-icons .home {
   margin-left: 20px;
   font-size: 20px;
   color: black;

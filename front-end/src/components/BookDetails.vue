@@ -11,13 +11,9 @@
         <img :src="coverImage" alt="Book cover" />
         <div class="price-button-container">
           <p class="price">{{ book.price }} $</p>
-          <p
-              class="add-favorite"
-              :class="{ 'favorite-added': book.isFavorite }"
-              @click="toggleFavorite"
-          >
-            {{ book.isFavorite ? '★ Remove from Favorite' : '☆ Add to Favorite' }}
-          </p>
+          <button class="add-favorite" @click="toggleFavorite(book)">
+            {{ book.isFavorite ? "Remove from Favorites" : "Add to Favorites" }}
+          </button>
         </div>
       </div>
 
@@ -113,8 +109,28 @@ export default {
     closeDetails() {
       this.$emit('close');
     },
-    toggleFavorite() {
-      this.$emit('favoriteToggled', this.book);
+    async toggleFavorite(book) {
+      const userId = this.$store.state.userId; // Assuming userId is in Vuex store
+      try {
+        if (!book.isFavorite) {
+          const response = await fetch("https://bot.servhub.fr/api/favorites", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ user_id: userId, book_id: book.book_id }),
+          });
+          if (response.ok) {
+            book.isFavorite = true;
+            alert(`${book.title} added to favorites.`);
+          }
+        } else {
+          // Handle removing from favorites if needed
+          alert(`${book.title} is already in favorites.`);
+        }
+      } catch (error) {
+        console.error("Error toggling favorite:", error);
+      }
     },
     getBookCover(isbn) {
       if (isbn) {

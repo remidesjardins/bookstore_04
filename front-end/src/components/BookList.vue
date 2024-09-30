@@ -59,8 +59,36 @@ export default {
     selectBook(book) {
       this.$emit("bookSelected", book);
     },
-    toggleFavorite(book) {
-      this.$emit("toggleFavorite", book);
+    async toggleFavorite(book) {
+      const userToken = this.$store.state.userToken;
+      const userId = this.$store.state.userId;
+
+      const myHeaders = new Headers();
+      myHeaders.append("Content-Type", "application/json");
+      myHeaders.append("Authorization", `Bearer ${userToken}`); // Add token to the headers
+
+      const requestOptions = {
+        method: "POST",
+        headers: myHeaders,
+        body: JSON.stringify({ user_id: userId, book_id: book.book_id }),
+        redirect: "follow"
+      };
+
+      try {
+        if (!book.isFavorite) {
+          const response = await fetch("https://bot.servhub.fr/api/favorites", requestOptions);
+          if (response.ok) {
+            book.isFavorite = true;
+            alert(`${book.title} added to favorites.`);
+          } else {
+            throw new Error("Failed to add favorite");
+          }
+        } else {
+          alert(`${book.title} is already in favorites.`);
+        }
+      } catch (error) {
+        console.error("Error toggling favorite:", error);
+      }
     },
     slideLeft() {
       this.$refs.bookSlider.scrollLeft -= 250;

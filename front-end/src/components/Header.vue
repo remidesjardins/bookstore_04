@@ -15,12 +15,15 @@
     <SearchBar :searchQuery="searchQuery" @search="emitSearchQuery" />
 
     <div class="header-icons" :class="{ 'mobile-menu': isMenuOpen }">
-      <div class="add-book" @click.stop="showAddBookForm">
+      <div class="home">
+        <i class="fas fa-home fa-sm"></i>
+      </div>      <div class="add-book" @click.stop="showAddBookForm">
         Add a book <span class="icon"><i class="fas fa-plus fa-sm"></i></span></div>
       <div class="logout" @click="logOut">
         Log Out <span class="icon"></span><i class="fas fa-sign-out-alt fa-lg"></i></div>
-      <div class="favorite">
-        Favorite <span class="icon"> <i class="fas fa-star fa-sm"></i> </span></div>
+      <div class="favorite" @click="goToFavorites">
+        Favorite <span class="icon"> <i class="fas fa-star"></i> </span>
+      </div>
     </div>
   </header>
 </template>
@@ -37,6 +40,12 @@ export default {
     };
   },
   methods: {
+    goToFavorites() {
+      this.$router.push("/favorites");
+    },
+    goToHome(){
+      this.$router.push("/");
+    },
     searchBook(query) {
       this.$emit("update:searchQuery", query);
     },
@@ -140,7 +149,8 @@ export default {
 
   .header-icons .add-book,
   .header-icons .logout,
-  .header-icons .favorite{
+  .header-icons .favorite
+  .header-icons .home  {
     border-bottom: 1px solid black;
   }
   .hamburger {

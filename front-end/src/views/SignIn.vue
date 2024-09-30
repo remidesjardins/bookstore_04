@@ -1,4 +1,11 @@
 <template>
+  <header class="app-header">
+    <div class="logo">
+      <span>BOOK</span>
+      <br />
+      <span>HAVEN</span>
+    </div>
+  </header>
   <div class="signup-container">
     <h2>Create an account</h2>
     <form @submit.prevent="handleSubmit">
@@ -37,7 +44,7 @@
       <button type="submit" class="submit-btn">Sign In</button>
 
       <p class="already-account">You already have an account?</p>
-      <button type="button" class="login-btn">Log In</button>
+      <button type="button" class="login-btn" @click="goToLogin">Log In</button>
     </form>
   </div>
 </template>
@@ -65,6 +72,9 @@ export default {
     };
   },
   methods: {
+    goToLogin() {
+      this.$router.push('/Login');
+    },
     togglePasswordVisibility() {
       this.showPassword = !this.showPassword;
     },
@@ -153,13 +163,41 @@ export default {
 </script>
 
 <style scoped>
+.app-header {
+  display: flex;
+  background-color: #d9a05b;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  z-index: 1001;
+  width: 100%;
+  position: absolute;
+  top: 0;
+}
+
+/* Style for the logo */
+.logo {
+  font-size: 40px;
+  padding: 10px;
+  font-weight: bold;
+  color: black;
+  line-height: 1.2;
+  text-align: center;
+}
+
+.logo span:first-child {
+  letter-spacing: 3px;
+}
+
 .signup-container {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  height: 100vh;
+  justify-content: flex-start;
+  height: calc(100vh - 80px);
   font-family: Arial, sans-serif;
+  padding-top: 250px;
+  box-sizing: border-box;
 }
 
 h2 {

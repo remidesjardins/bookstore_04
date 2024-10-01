@@ -91,10 +91,13 @@ export default {
     async submitForm() {
       try {
         console.log(this.book);
+        const token = this.$store.state.userToken;
+        console.log(token);
         const response = await fetch("https://bot.servhub.fr/api/books", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`,
           },
           body: JSON.stringify(this.book),
         });

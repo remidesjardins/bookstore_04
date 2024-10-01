@@ -15,11 +15,11 @@
     <SearchBar :searchQuery="searchQuery" @search="emitSearchQuery" />
 
     <div class="header-icons" :class="{ 'mobile-menu': isMenuOpen }">
+      <div class="add-book" @click.stop="showAddBookForm">
+        Add a book <span class="icon"><i class="fas fa-plus fa-sm"></i></span></div>
       <div class="home"  @click="goToHome">
         Home <span class="icon"></span><i class="fas fa-home fa-lg"></i>
       </div>
-      <div class="add-book" @click.stop="showAddBookForm">
-        Add a book <span class="icon"><i class="fas fa-plus fa-sm"></i></span></div>
       <div class="logout" @click="logOut">
         Log Out <span class="icon"></span><i class="fas fa-sign-out-alt fa-lg"></i></div>
       <div class="favorite" @click="goToFavorites">
@@ -129,7 +129,8 @@ export default {
 
 .header-icons .add-book,
 .header-icons .logout,
-.header-icons .favorite {
+.header-icons .favorite,
+.header-icons .home {
   margin: 10px 0;
   font-size: 20px;
   padding: 10px 0;

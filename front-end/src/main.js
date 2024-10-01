@@ -10,3 +10,4 @@ createApp(App)
 
 localStorage.setItem('authToken', "");
 localStorage.removeItem('authToken');
+

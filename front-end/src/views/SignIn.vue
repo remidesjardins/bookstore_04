@@ -138,6 +138,7 @@ export default {
 
         const myHeaders = new Headers();
         myHeaders.append("Content-Type", "application/json");
+        myHeaders.append("Authorization", `Bearer ${this.$store.state.userToken}`);
 
         const requestOptions = {
           method: "POST",

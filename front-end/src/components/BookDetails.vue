@@ -11,7 +11,7 @@
         <img :src="coverImage" alt="Book cover" />
         <div class="price-button-container">
           <p class="price">{{ book.price }} $</p>
-          <button class="add-favorite" @click="toggleFavorite(book)">
+          <button class="add-favorite" @click="toggleFavorite(book.book_id)">
             {{ book.isFavorite ? "Remove from Favorites" : "Add to Favorites" }}
           </button>
         </div>
@@ -75,6 +75,7 @@ export default {
       if (confirm("Are you sure you want to delete this book?")) {
         const myHeaders = new Headers();
         myHeaders.append("Content-Type", "application/json");
+        myHeaders.append("Authorization", `Bearer ${this.$store.state.userToken}`);
 
         const requestOptions = {
           method: "DELETE",
@@ -109,27 +110,61 @@ export default {
     closeDetails() {
       this.$emit('close');
     },
-    async toggleFavorite(book) {
-      const userId = this.$store.state.userId; // Assuming userId is in Vuex store
+
+    async toggleFavorite(bookId) {
+      if (this.isFavorite(bookId)) {
+        // If the book is already a favorite, unfavorite it
+        await this.unfavoriteBook(bookId);
+      } else {
+        // Otherwise, favorite the book
+        await this.favoriteBook(bookId);
+      }
+    },
+    async favoriteBook(bookId) {
       try {
-        if (!book.isFavorite) {
-          const response = await fetch("https://bot.servhub.fr/api/favorites", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ user_id: userId, book_id: book.book_id }),
-          });
-          if (response.ok) {
-            book.isFavorite = true;
-            alert(`${book.title} added to favorites.`);
-          }
+        const userId = this.$store.state.userId;
+
+        // Ensure userId and bookId are not undefined or null
+        if (!userId || !bookId) {
+          throw new Error('Missing userId or bookId');
+        }
+
+        const response = await fetch('https://bot.servhub.fr/api/favorites', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${this.$store.state.userToken}`, // Include token for auth
+          },
+          body: JSON.stringify({ user_id: userId, book_id: bookId }), // Proper payload format
+        });
+
+        if (!response.ok) {
+          throw new Error('Error favoriting the book');
+        }
+
+        const result = await response.json();
+        this.$store.commit('addFavorite', { book_id: bookId }); // Add to the Vuex store
+
+      } catch (error) {
+        console.error('Error:', error);
+      }
+    },
+    async unfavoriteBook(bookId) {
+      try {
+        const response = await fetch(`https://bot.servhub.fr/api/favorites/${bookId}`, {
+          method: 'DELETE',
+          headers: {
+            'Authorization': `Bearer ${this.$store.state.userToken}`,
+          },
+        });
+
+        if (response.ok) {
+          this.$store.commit('removeFavorite', bookId); // Remove from the Vuex store
         } else {
-          // Handle removing from favorites if needed
-          alert(`${book.title} is already in favorites.`);
+          console.error('Error unfavoriting the book');
         }
       } catch (error) {
-        console.error("Error toggling favorite:", error);
+        console.error('Error:', error);
       }
     },
     getBookCover(isbn) {

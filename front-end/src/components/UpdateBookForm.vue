@@ -77,7 +77,16 @@ export default {
   methods: {
     async fetchBookDetails() {
       try {
-        const response = await fetch(`https://bot.servhub.fr/api/books/${this.bookId}`);
+        const token = this.$store.state.userToken; // Get the token from the Vuex store
+
+        const response = await fetch(`https://bot.servhub.fr/api/books/${this.bookId}`, {
+          method: "GET",
+          headers: {
+            "Authorization": `Bearer ${token}`, // Include the token in the Authorization header
+            "Content-Type": "application/json",
+          },
+        });
+
         const data = await response.json();
 
         if (data && data[0]) {
@@ -95,10 +104,12 @@ export default {
           return;
         }
 
+        const token = this.$store.state.userToken;
         const response = await fetch(`https://bot.servhub.fr/api/books/${this.bookId}`, {
           method: "PUT",
           headers: {
             "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`,
           },
           body: JSON.stringify(this.book),
         });

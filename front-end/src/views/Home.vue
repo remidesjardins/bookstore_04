@@ -66,8 +66,11 @@ export default {
   },
   methods: {
     fetchBooks() {
+      console.log(this.$store.state.userId);
       const myHeaders = new Headers();
       myHeaders.append("Content-Type", "application/json");
+      myHeaders.append("Authorization", `Bearer ${this.$store.state.userToken}`);
+
       const requestOptions = {
         method: "GET",
         headers: myHeaders,

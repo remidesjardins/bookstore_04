@@ -10,9 +10,11 @@
             <div class="book-id">{{ book.id }}</div>
             <div class="book-title">{{ book.title }}</div>
             <div class="book-price">{{ book.price }} $</div>
-            <div class="favorite-icon" :class="{ added: book.isFavorite }" @click.stop="toggleFavorite(book)">
-              {{ book.isFavorite ? '★' : '☆' }}
-            </div>
+            <i
+                :class="isFavorite(book.book_id) ? 'fas fa-star favorite' : 'far fa-star not-favorite'"
+                @click.stop="toggleFavorite(book.book_id)"
+                class="star-icon"
+            ></i>
           </div>
         </div>
         <div v-else>
@@ -28,6 +30,8 @@
 
 <script>
 
+import LogIn from "@/views/LogIn.vue";
+
 export default {
   props: {
     bookList: Array,
@@ -41,55 +45,110 @@ export default {
   },
   methods: {
     fetchBooks() {
+      console.log(this.$store.state.userToken);
       const myHeaders = new Headers();
       myHeaders.append("Content-Type", "application/json");
+      myHeaders.append("Authorization", `Bearer ${this.$store.state.userToken}`);
+      const userToken = this.$store.state.userToken;
+
       const requestOptions = {
         method: "GET",
-        headers: myHeaders,
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${userToken}`,
+        },
         redirect: "follow",
       };
 
       fetch("https://bot.servhub.fr/api/books", requestOptions)
           .then((response) => response.json())
           .then((result) => {
+            console.log(result);
             this.$emit("updateBooks", result); // Emit to parent to update bookList
             result.forEach((book) => this.getBookCover(book.isbn));
           })
-          .catch((error) => console.error("Error fetching books:", error));
+          .catch((error) => console.log("ICI :", error));
     },
     selectBook(book) {
       this.$emit("bookSelected", book);
     },
-    async toggleFavorite(book) {
-      const userToken = this.$store.state.userToken;
-      const userId = this.$store.state.userId;
-      console.log("User id ", userId);
-      console.log("User Token ", userToken);
-      const myHeaders = new Headers();
-      myHeaders.append("Content-Type", "application/json");
-      myHeaders.append("Authorization", `Bearer ${userToken}`); // Add token to the headers
-
-      const requestOptions = {
-        method: "POST",
-        headers: myHeaders,
-        body: JSON.stringify({ user_id: userId, book_id: book.book_id }),
-        redirect: "follow"
-      };
-
+    isFavorite(bookId) {
+      const favorites = this.$store.state.favoriteBooks;
+      if (Array.isArray(favorites)) {
+        return favorites.some(favBook => favBook.book_id === bookId);
+      } else {
+        return false; // Default to not a favorite if the favorites list is not an array
+      }
+    },
+    async toggleFavorite(bookId) {
+      if (this.isFavorite(bookId)) {
+        // If the book is already a favorite, unfavorite it
+        await this.unfavoriteBook(bookId);
+      } else {
+        // Otherwise, favorite the book
+        await this.favoriteBook(bookId);
+      }
+    },
+    async favoriteBook(bookId) {
       try {
-        if (!book.isFavorite) {
-          const response = await fetch("https://bot.servhub.fr/api/favorites", requestOptions);
-          if (response.ok) {
-            book.isFavorite = true;
-            alert(`${book.title} with ${book.book_id} ${userId} ${userToken} added to favorites.`);
-          } else {
-            throw new Error("Failed to add favorite");
-          }
+        const userId = this.$store.state.userId;
+
+        // Ensure userId and bookId are not undefined or null
+        console.log("UserID : ", userId);
+        console.log("Book ID : ", bookId);
+        const token = this.$store.state.userToken;
+        if (!userId || !bookId) {
+          throw new Error('Missing userId or bookId');
+        }
+
+        const response = await fetch(`https://bot.servhub.fr/api/favorites/${userId}`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${this.$store.state.userToken}`, // Include token for auth
+          },
+          body: JSON.stringify({ user_id: userId, book_id: bookId }), // Proper payload format
+        });
+
+        if (!response.ok) {
+          throw new Error('Error favoriting the book');
+        }
+
+        const result = await response.json();
+        this.$store.commit('addFavorite', { book_id: bookId }); // Add to the Vuex store
+
+      } catch (error) {
+        console.error('Error:', error);
+      }
+    },
+    async unfavoriteBook(bookId) {
+      try {
+        const userId = this.$store.state.userId;
+        const token = this.$store.state.userToken;
+        console.log("EHOHJESUISLA");
+        console.log("UserID : ", userId);
+        console.log("Book ID : ", bookId);
+        // Ensure both userId and bookId are valid
+        if (!userId || !bookId) {
+          throw new Error('Missing userId or bookId');
+        }
+
+        // Make the DELETE request, including userId in the body if necessary
+        const response = await fetch(`https://bot.servhub.fr/api/favorites/${userId}`, {
+          method: 'DELETE',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ user_id: userId, book_id: bookId }),  // Include user_id and book_id in the body
+        });
+        if (response.ok) {
+          this.$store.commit('removeFavorite', bookId);  // Remove the book from the Vuex store
         } else {
-          alert(`${book.title} is already in favorites.`);
+          console.error('Error unfavoriting the book: BLABLABLA', await response.text());
         }
       } catch (error) {
-        console.error("Error toggling favorite:", error);
+        console.error('Error:', error);
       }
     },
     slideLeft() {
@@ -143,6 +202,7 @@ export default {
 </script>
 
 <style scoped>
+
 .book-list-container {
   display: flex;
   align-items: center;
@@ -230,5 +290,22 @@ export default {
 #empty-title {
   font-size: 28px;
   font-weight: bold;
+}
+
+.star-icon {
+  cursor: pointer;
+  font-size: 24px; /* Larger font size for better visibility */
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  transition: color 0.3s ease;
+}
+
+.star-icon.favorite {
+  color: black;
+}
+
+.star-icon.not-favorite {
+  color: grey;
 }
 </style>

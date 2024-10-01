@@ -56,9 +56,17 @@ export default {
   methods: {
     async fetchFavoriteBooks() {
       try {
-        const userId = this.$store.state.userId;
-        console.log("UserID : ", userId);
-        const response = await fetch(`https://bot.servhub.fr/api/favorites/${userId}`);
+        const userId = state.userId;
+        const token = state.userToken;
+
+        const requestOptions = {
+          method: "GET",
+          headers: {
+            "Authorization": `Bearer ${token}`,  // Add the Authorization header
+            "Content-Type": "application/json",
+          },
+        };
+        const response = await fetch(`https://bot.servhub.fr/api/favorites/${userId}`, requestOptions);
         const result = await response.json();
         console.log("Favorites from API: ", result);
         this.$store.commit('setFavorites', result);
@@ -82,7 +90,6 @@ export default {
     },
   },
   mounted() {
-    console.log("User ID: ", this.$store.userId);
     if (this.$store.state.userId) {
       this.fetchFavoriteBooks();
     } else {

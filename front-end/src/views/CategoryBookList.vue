@@ -2,7 +2,7 @@
   <Header :searchQuery="searchQuery" @search="handleSearch" />
   <div class="category-popup">
     <span class="close-button" @click="closePopup">❌</span>
-    <h3>Books in {{ category }}</h3>
+    <h3>Books in {{ selectedCategory }}</h3>
     <BookList :bookList="filteredBooks" @bookSelected="showBookDetailsOverlay"/>
   </div>
 </template>
@@ -35,6 +35,8 @@ export default {
     fetchBooks() {
       const myHeaders = new Headers();
       myHeaders.append("Content-Type", "application/json");
+      myHeaders.append("Authorization", `Bearer ${this.$store.state.userToken}`);
+
       const requestOptions = {
         method: "GET",
         headers: myHeaders,

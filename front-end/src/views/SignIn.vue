@@ -1,9 +1,7 @@
 <template>
   <header class="app-header">
     <div class="logo">
-      <span>BOOK</span>
-      <br />
-      <span>HAVEN</span>
+      <span>BOOK HAVEN</span>
     </div>
   </header>
   <div class="signup-container">
@@ -32,7 +30,7 @@
       </div>
 
       <!-- Role Field -->
-      <div class="form-group">
+      <div class="form-group" id="role-field">
         <select v-model="role" required>
           <option value="" disabled>Select a role</option>
           <option value="user">User</option>
@@ -161,6 +159,7 @@ export default {
     },
   },
 };
+
 </script>
 
 <style scoped>
@@ -169,17 +168,18 @@ export default {
   background-color: #d9a05b;
   justify-content: center;
   align-items: center;
-  padding: 20px;
+  padding: 1.3rem 0;
   z-index: 1001;
   width: 100%;
   position: absolute;
   top: 0;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
 }
 
 /* Style for the logo */
 .logo {
-  font-size: 40px;
-  padding: 10px;
+  font-size: 2.5rem;
+  padding: .65rem;
   font-weight: bold;
   color: black;
   line-height: 1.2;
@@ -187,7 +187,7 @@ export default {
 }
 
 .logo span:first-child {
-  letter-spacing: 3px;
+  letter-spacing: .2rem;
 }
 
 .signup-container {
@@ -195,21 +195,21 @@ export default {
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
-  height: calc(100vh - 80px);
+  height: calc(100vh - 80vw);
   font-family: Arial, sans-serif;
-  padding-top: 250px;
+  padding-top: 9rem;
   box-sizing: border-box;
 }
 
 h2 {
-  font-size: 28px;
-  margin-bottom: 30px;
+  font-size: 1.75rem;
+  margin: .8rem 0 2rem 0;
   font-weight: bold;
 }
 
 form {
   width: 100%;
-  max-width: 800px; /* Increase width for multiple columns */
+  max-width: 50rem; /* Increase width for multiple columns */
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -218,22 +218,22 @@ form {
 .form-row {
   display: flex;
   justify-content: space-between;
-  width: 100%;
-  margin-bottom: 40px;
+  width: 80%;
+  margin-bottom: 1.5rem;
 }
 
 .form-group {
-  width: 48%; /* Allow two fields to fit side-by-side */
+  width: 45%; /* Allow two fields to fit side-by-side */
   position: relative;
 }
 
 .form-group input,
 .form-group select {
-  width: 100%;
-  padding: 12px;
-  font-size: 20px;
-  border: 2px solid #000;
-  border-radius: 25px;
+  width: 90%;
+  padding: .60rem;
+  font-size: .8rem;
+  border: .1rem solid #000;
+  border-radius: 5rem;
   outline: none;
   text-align: left;
   background-color: #f9f9f9;
@@ -241,8 +241,17 @@ form {
 
 .form-group input::placeholder{
   color: #857f7f;
-  font-size: 20px;
+  font-size: .8rem;
   text-align: left;
+}
+
+.form-group select {
+  margin-right: 0;
+}
+
+#role-field {
+  display: flex;
+  justify-content: center;
 }
 
 .password-group {
@@ -251,44 +260,42 @@ form {
 
 .password-group i {
   position: absolute;
-  right: 10px;
+  right: 1rem;
   top: 50%;
   transform: translateY(-50%);
   cursor: pointer;
 }
 
-input::placeholder {
-  color: #bbb;
-  font-size: 14px;
-}
-
 button.submit-btn,
 button.login-btn {
-  width: 20%;
-  padding: 12px;
+  width: 12.5%;
+  padding: .75rem;
   border: none;
-  border-radius: 25px;
+  border-radius: 5rem;
   background-color: #d3d3d3;
   color: black;
-  font-size: 18px;
+  font-size: 1rem;
   font-weight: bold;
   cursor: pointer;
-  margin-top: 20px;
+  margin: 0 0 1rem 0;
 }
 
 button.submit-btn {
-  margin-top: 40px;
-  background-color: #c0c0c0;
+  margin-top: 1.5rem;
 }
 
 .already-account {
-  margin-top: 20px;
-  font-size: 14px;
+  margin-top: .8rem;
+  font-size: .8rem;
   color: gray;
   text-align: center;
 }
 
 button:hover {
   background-color: #a9a9a9;
+}
+
+@media only screen and (max-width: 500px) {
+
 }
 </style>

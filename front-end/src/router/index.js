@@ -11,7 +11,7 @@ const routes = [
         path: '/',
         name: 'Home',
         component: Home,
-        meta: { requiresAuth: true }, // Indique que la route nécessite une authentification
+        meta: { requiresAuth: true }, // Indique que la route nénpmcessite une authentification
     },
     {
 

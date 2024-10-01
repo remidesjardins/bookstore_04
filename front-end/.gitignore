@@ -26,6 +26,8 @@ front-end/.vscode/*
 *.njsproj
 *.sln
 *.sw?
+front-end/package.json
+front-end/package-lock.json
 
 *.tsbuildinfo
 

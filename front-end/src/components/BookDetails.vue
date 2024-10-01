@@ -24,7 +24,7 @@
       </div>
 
       <!-- Action icons (Modify and Delete) -->
-      <div class="bottom-right-buttons">
+      <div class="bottom-right-buttons" v-if="this.$store.state.isAdmin">
         <button @click="showUpdateForm = true" class="icon-button">
           <i class="fas fa-edit"></i>
         </button>

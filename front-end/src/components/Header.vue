@@ -15,7 +15,7 @@
     <SearchBar :searchQuery="searchQuery" @search="emitSearchQuery" />
 
     <div class="header-icons" :class="{ 'mobile-menu': isMenuOpen }">
-      <div class="add-book" @click.stop="showAddBookForm">
+      <div class="add-book" @click.stop="showAddBookForm" v-if="this.$store.state.isAdmin">
         Add a book <span class="icon"><i class="fas fa-plus fa-sm"></i></span></div>
       <div class="home"  @click="goToHome">
         Home <span class="icon"></span><i class="fas fa-home fa-lg"></i>

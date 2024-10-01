@@ -7,18 +7,21 @@ const store = createStore({
         userToken: localStorage.getItem('authToken'),
         userId: localStorage.getItem('userId'),
         favoriteBooks: [],
+        isAdmin: localStorage.getItem('isAdmin'),
     },
     mutations: {
-        login(state, { authToken, userId }) {
+        login(state, { authToken, userId, isAdmin }) {
             state.isAuthenticated = true;
             state.userToken = authToken;
             state.userId = userId;
             state.favoriteBooks = [];
+            state.isAdmin = isAdmin;
         },
         logout(state) {
             state.isAuthenticated = false;
             state.userToken = '';
             state.userId = undefined;
+            state.isAdmin = undefined;
         },
         setFavorites(state, favoriteBooks) {  // Add mutation for setting favorite books
             state.favoriteBooks = favoriteBooks;
@@ -58,7 +61,15 @@ const store = createStore({
                 if (response.ok && result.token) {
                     localStorage.setItem('authToken', result.token);
                     localStorage.setItem('userId', result.userId);
-                    commit("login", { authToken: result.token, userId: result.userId });                    await this.dispatch('fetchFavoriteBooks');
+                    let isAdmin;
+                    if (result.role === 'ADMIN'){
+                        isAdmin = true;
+                    }else {
+                        isAdmin = false;
+                    }
+                    localStorage.setItem('isAdmin', isAdmin);
+                    commit("login", { authToken: result.token, userId: result.userId, isAdmin: isAdmin });
+                    await this.dispatch('fetchFavoriteBooks');
                     router.push('/');
                 } else {
                     throw new Error("Login failed");

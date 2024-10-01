@@ -22,12 +22,16 @@ const store = createStore({
         },
         setFavorites(state, favoriteBooks) {  // Add mutation for setting favorite books
             state.favoriteBooks = favoriteBooks;
+            localStorage.setItem('favoriteBooks', JSON.stringify(favoriteBooks));
         },
+
         addFavorite(state, book) {
             state.favoriteBooks.push(book); // Add the book to the list
+            localStorage.setItem('favoriteBooks', JSON.stringify(state.favoriteBooks)); // Persist favorites after adding
         },
         removeFavorite(state, bookId) {
             state.favoriteBooks = state.favoriteBooks.filter(book => book.book_id !== bookId);
+            localStorage.setItem('favoriteBooks', JSON.stringify(state.favoriteBooks)); // Persist favorites after removal
         },
     },
     actions: {
@@ -87,6 +91,14 @@ const store = createStore({
                 }
             } catch (error) {
                 console.error("Error fetching favorites:", error);
+            }
+        },
+        initFavorites({ commit }) {
+            const storedFavorites = localStorage.getItem('favoriteBooks');
+            if (storedFavorites) {
+                commit('setFavorites', JSON.parse(storedFavorites)); // Restore from localStorage
+            } else {
+                this.dispatch('fetchFavoriteBooks'); // Fetch from API if not found in localStorage
             }
         },
         logout({ commit }) {

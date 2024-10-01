@@ -9,8 +9,10 @@
         :text="searchTitle"
         :isEmpty="filteredBooks.length === 0"
     />
-    <CategoryList :categories="categories" @categorySelected="openCategoryPopup" />
-
+    <CategoryList
+        :categories="categories"
+        @selectCategory="openCategoryPopup"
+    />
     <!-- Book Details Overlay -->
     <BookDetails
         v-if="showBookDetails"
@@ -85,10 +87,14 @@ export default {
           .catch((error) => console.error(error));
     },
     openCategoryPopup(category) {
-      this.selectedCategory = category;
       this.$router.push({
-        name: 'category',  // Assuming the route name is 'category'
-        params: { category: `${category}` },
+        name: 'category',
+        params: {
+          category,
+        },
+        query: {
+          fromFavorites: false
+        }
       });
     },
     showBookDetailsOverlay(book) {
@@ -113,7 +119,7 @@ export default {
       this.isAddBookFormVisible = false;
     },
     addBook(newBook) {
-      this.books.push(newBook); // Add the new book to the book list
+      this.books.push(newBook);
     },
     updateSearchQuery(query) {
       this.searchQuery = query;
@@ -127,6 +133,7 @@ export default {
     this.polling = setInterval(() => {
       this.fetchBooks();
     }, 5000);
+    this.$store.dispatch('initFavorites');
   },
   components: {
     Header,

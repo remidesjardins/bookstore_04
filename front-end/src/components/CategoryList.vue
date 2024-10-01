@@ -6,7 +6,7 @@
           class="category"
           v-for="category in categories"
           :key="category"
-          @click="selectCategory(category)"
+          @click="$emit('selectCategory', category)"
       >
         <h2>{{ category }}</h2>
       </div>

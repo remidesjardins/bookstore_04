@@ -15,19 +15,37 @@ export default {
   data() {
     return {
       books: [],
-      filteredBooks: [],
       searchQuery: "",
       selectedCategory: this.$route.params.category, // Get category from route params
     };
   },
+  props: {
+    category: {
+      type: String,
+      required: true,
+    },
+    fromFavorites: Boolean,
+  },
   computed: {
     filteredBooks() {
-      if (this.searchQuery.trim() === "") {
-        return this.books.filter(book => book.category === this.selectedCategory);
+      let booksToFilter = [];
+
+      // Convert query param to boolean
+      const fromFavorites = JSON.parse(this.$route.query.fromFavorites || 'false');
+
+      if (fromFavorites) {
+        booksToFilter = this.$store.state.favoriteBooks;
+      } else {
+        booksToFilter = this.books;
       }
-      return this.books.filter(book =>
-          book.category === this.selectedCategory &&
-          (book.title.toLowerCase().includes(this.searchQuery.toLowerCase()) || book.book_id.toString().includes(this.searchQuery.toLowerCase()))
+
+      if (this.searchQuery.trim() === "") {
+        return booksToFilter.filter(book => book.category === this.$route.params.category);
+      }
+      return booksToFilter.filter(book =>
+          book.category === this.$route.params.category &&
+          (book.title.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
+              book.book_id.toString().includes(this.searchQuery.toLowerCase()))
       );
     },
   },
@@ -46,6 +64,7 @@ export default {
       fetch("https://bot.servhub.fr/api/books", requestOptions)
           .then((response) => response.json())
           .then((result) => {
+            console.log("Result: ", result);
             this.books = result;
           })
           .catch((error) => console.error(error));

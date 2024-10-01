@@ -9,6 +9,10 @@
         :text="searchTitle"
         :isEmpty="filteredBooks.length === 0"
     />
+    <CategoryList
+        :categories="categories"
+        @selectCategory="openCategoryPopup"
+    />
 
     <!-- Book Details Overlay -->
     <BookDetails
@@ -24,14 +28,20 @@
 import Header from "../components/Header.vue";
 import BookList from "../components/BookList.vue";
 import BookDetails from "../components/BookDetails.vue";
+import CategoryList  from "@/components/CategoryList.vue";
+import CategoryBookList from "../views/CategoryBookList.vue";
 
 export default {
   data() {
     return {
       searchQuery: "",
-      favoriteBooks: [],
       selectedBook: null,
       showBookDetails: false,
+      selectedCategory: '',
+      category: '',
+      categories: ["Science Fiction", "Mystery & Thriller", "Children's books", "Historical", "Educational"],
+
+
     };
   },
   computed: {
@@ -50,14 +60,17 @@ export default {
     searchTitle() {
       return this.searchQuery.trim() === "" ? "Your Favorites" : "Search Result";
     },
-    favoriteBooks() {
-      return this.$store.commit('setFavorites', result);    }
+    computed: {
+      favoriteBooks() {
+        return this.$store.state.favoriteBooks;
+      },
+    },
   },
   methods: {
     async fetchFavoriteBooks() {
       try {
-        const userId = state.userId;
-        const token = state.userToken;
+        const userId = this.$store.state.userId;
+        const token = this.$store.state.userToken;
 
         const requestOptions = {
           method: "GET",
@@ -88,6 +101,17 @@ export default {
     handleSearch(query) {
       this.searchQuery = query;
     },
+    openCategoryPopup(category) {
+      this.$router.push({
+        name: 'category',
+        params: {
+          category,
+        },
+        query: {
+          fromFavorites: true // Add a query param to indicate filtering by favorites
+        }
+      });
+    },
   },
   mounted() {
     if (this.$store.state.userId) {
@@ -107,6 +131,8 @@ export default {
     Header,
     BookList,
     BookDetails,
+    CategoryList,
+    CategoryBookList,
   },
 };
 </script>

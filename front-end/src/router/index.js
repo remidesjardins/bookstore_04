@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import store from '@/Store'
+import store from '@/store'
 import Home from '../views/Home.vue'
 import CategoryBookList from '../views/CategoryBookList.vue'
 import Favorites from "@/views/Favorites.vue";
@@ -14,6 +14,7 @@ const routes = [
         meta: { requiresAuth: true }, // Indique que la route nécessite une authentification
     },
     {
+
         path: '/categories/:category',
         name: 'category',
         component: CategoryBookList,

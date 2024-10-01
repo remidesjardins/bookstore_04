@@ -2,7 +2,7 @@
   <div class="add-book-form">
     <div class="form-header">
       <h2>Add Book</h2>
-      <button @click="$emit('close-form')" class="close-btn">✖</button>
+      <button @click="$emit('close-form')" class="close-btn"><i class="fa-solid fa-xmark fa-xl"></i></button>
     </div>
 
     <form @submit.prevent="submitForm">
@@ -133,10 +133,11 @@ export default {
 .add-book-form {
   background: white;
   padding: 20px;
-  border-radius: 10px;
+  border-radius: 30px;
   width: 70%;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   position: relative;
+  overflow: hidden;
 }
 
 .form-header {

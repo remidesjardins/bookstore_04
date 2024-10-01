@@ -11,7 +11,7 @@
             <div class="book-title">{{ book.title }}</div>
             <div class="book-price">{{ book.price }} $</div>
             <i
-                :class="isFavorite(book.book_id) ? 'fas fa-star favorite' : 'far fa-star not-favorite'"
+                :class="isFavorite(book.book_id) ? 'fa-solid fa-star favorite' : 'fa-regular fa-star not-favorite'"
                 @click.stop="toggleFavorite(book.book_id)"
                 class="star-icon"
             ></i>

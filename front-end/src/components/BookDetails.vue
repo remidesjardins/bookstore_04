@@ -1,7 +1,7 @@
 <template>
   <div class="overlay" @click.self="closeDetails">
     <div class="book-details" @click.stop>
-      <span class="close-button" @click="closeDetails">❌</span>
+      <span class="close-button" @click="closeDetails"><i class="fa-solid fa-xmark fa-2xl"></i></span>
 
       <!-- Left content: Image, Category, Price, Buttons -->
       <div class="left-content">
@@ -11,7 +11,11 @@
         <img :src="coverImage" alt="Book cover" />
         <div class="price-button-container">
           <p class="price">{{ book.price }} $</p>
-          <button class="add-favorite" @click="toggleFavorite(book.book_id)">
+          <button
+              class="add-favorite"
+              @click="toggleFavorite(book.book_id)"
+              :class="book.isFavorite ? 'favorite-added' : ''"
+          >
             {{ book.isFavorite ? "Remove from Favorites" : "Add to Favorites" }}
           </button>
         </div>
@@ -26,10 +30,10 @@
       <!-- Action icons (Modify and Delete) -->
       <div class="bottom-right-buttons" v-if="this.$store.state.isAdmin">
         <button @click="showUpdateForm = true" class="icon-button">
-          <i class="fas fa-edit"></i>
+          <i class="fa-solid fa-pen-to-square"></i>
         </button>
         <button @click="deleteBook(book.book_id)" class="icon-button delete-button">
-          <i class="fas fa-trash-alt"></i>
+          <i class="fa-solid fa-trash"></i>
         </button>
       </div>
     </div>
@@ -97,9 +101,6 @@ export default {
     goToUpdateBook(bookId) {
       this.$router.push({ name: "UpdateBook", params: { bookId } });
     },
-    openUpdateForm() {
-      this.showUpdateForm = true;
-     },
     closeUpdateForm() {
       this.showUpdateForm = false;
     },
@@ -111,57 +112,63 @@ export default {
       this.$emit('close');
     },
 
+    isFavorite(bookId) {
+      const favorites = this.$store.state.favoriteBooks;
+      return favorites.some(favBook => favBook.book_id === bookId);
+    },
+
     async toggleFavorite(bookId) {
       if (this.isFavorite(bookId)) {
-        // If the book is already a favorite, unfavorite it
         await this.unfavoriteBook(bookId);
+        this.book.isFavorite = false;
       } else {
-        // Otherwise, favorite the book
         await this.favoriteBook(bookId);
+        this.book.isFavorite = true;
       }
     },
+
     async favoriteBook(bookId) {
       try {
         const userId = this.$store.state.userId;
+        const token = this.$store.state.userToken;
+        if (!userId || !bookId) throw new Error('Missing userId or bookId');
 
-        // Ensure userId and bookId are not undefined or null
-        if (!userId || !bookId) {
-          throw new Error('Missing userId or bookId');
-        }
-
-        const response = await fetch('https://bot.servhub.fr/api/favorites', {
+        const response = await fetch(`https://bot.servhub.fr/api/favorites`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${this.$store.state.userToken}`, // Include token for auth
+            'Authorization': `Bearer ${token}`,
           },
-          body: JSON.stringify({ user_id: userId, book_id: bookId }), // Proper payload format
+          body: JSON.stringify({ user_id: userId, book_id: bookId }),
         });
 
-        if (!response.ok) {
+        if (response.ok) {
+          this.$store.commit('addFavorite', { book_id: bookId });
+        } else {
           throw new Error('Error favoriting the book');
         }
-
-        const result = await response.json();
-        this.$store.commit('addFavorite', { book_id: bookId }); // Add to the Vuex store
-
       } catch (error) {
         console.error('Error:', error);
       }
     },
+
     async unfavoriteBook(bookId) {
       try {
+        const userId = this.$store.state.userId;
+        const token = this.$store.state.userToken;
+        if (!userId || !bookId) throw new Error('Missing userId or bookId');
+
         const response = await fetch(`https://bot.servhub.fr/api/favorites/${bookId}`, {
           method: 'DELETE',
           headers: {
-            'Authorization': `Bearer ${this.$store.state.userToken}`,
+            'Authorization': `Bearer ${token}`,
           },
         });
 
         if (response.ok) {
-          this.$store.commit('removeFavorite', bookId); // Remove from the Vuex store
+          this.$store.commit('removeFavorite', bookId);
         } else {
-          console.error('Error unfavoriting the book');
+          throw new Error('Error unfavoriting the book');
         }
       } catch (error) {
         console.error('Error:', error);
@@ -197,6 +204,8 @@ export default {
   },
   mounted() {
     this.getBookCover(this.book.isbn);
+    this.book.isFavorite = this.isFavorite(this.book.book_id); // Initial check if the book is already a favorite
+
   }
 };
 </script>
@@ -218,7 +227,7 @@ export default {
 
 .book-details {
   background-color: white;
-  border-radius: 10px;
+  border-radius: 30px; /* Increase the border-radius to round the corners more */
   padding: 20px;
   max-width: 900px;
   max-height: 90vh;
@@ -229,6 +238,7 @@ export default {
   align-items: flex-start;
   position: relative;
   z-index: 10;
+  overflow: hidden; /* Ensure content stays inside the rounded borders */
 }
 
 .left-content {
@@ -261,17 +271,21 @@ export default {
 }
 
 .add-favorite {
-  display: inline-block;
-  padding: 10px;
-  background-color: lightgray;
-  border-radius: 5px;
+  width: 100%;
+  padding: 15px;
+  border: none;
+  border-radius: 25px;
+  background-color: #d3d3d3;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+  color: black;
+  font-size: 18px;
+  font-weight: bold;
   cursor: pointer;
-  text-align: center;
-  width: 200px;
+  margin-top: 10px;
 }
 
 .favorite-added {
-  background-color: gold;
+  background-color: #d9a05b;
   color: black;
 }
 
@@ -286,10 +300,10 @@ export default {
 
 .close-button {
   position: absolute;
-  top: 10px;
-  right: 15px;
+  top: 20px;
+  right: 20px;
   cursor: pointer;
-  font-size: 24px;
+
 }
 
 .category-label {

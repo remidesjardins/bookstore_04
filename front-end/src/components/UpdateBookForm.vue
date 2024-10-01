@@ -2,7 +2,7 @@
   <div class="add-book-form">
     <div class="form-header">
       <h2>Update Book</h2>
-      <button @click="$emit('close')" class="close-btn">✖</button>
+      <button @click="$emit('close')" class="close-btn"><i class="fa-solid fa-xmark fa-xl"></i></button>
     </div>
 
     <form @submit.prevent="updateBook">
@@ -43,7 +43,7 @@
       <div class="form-group">
         <label for="summary">Summary</label>
         <textarea id="summary" v-model="book.summary" placeholder="Enter book summary" required></textarea>
-      </div>
+      </div>x
 
       <!-- Hidden input for cover_image -->
       <input type="hidden" v-model="book.cover_image" />
@@ -133,10 +133,11 @@ export default {
 .add-book-form {
   background: white;
   padding: 20px;
-  border-radius: 10px;
+  border-radius: 30px;
   width: 100%;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   position: relative;
+  overflow: hidden;
 }
 
 .form-header {

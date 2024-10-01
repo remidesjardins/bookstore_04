@@ -16,14 +16,14 @@
 
     <div class="header-icons" :class="{ 'mobile-menu': isMenuOpen }">
       <div class="add-book" @click.stop="showAddBookForm" v-if="this.$store.state.isAdmin">
-        Add a book <span class="icon"><i class="fas fa-plus fa-sm"></i></span></div>
+        Add a book <span class="icon"><i class="fa-solid fa-plus"></i></span></div>
       <div class="home"  @click="goToHome">
-        Home <span class="icon"></span><i class="fas fa-home fa-lg"></i>
+        Home <span class="icon"></span><i class="fa-solid fa-house"></i>
       </div>
       <div class="logout" @click="logOut">
-        Log Out <span class="icon"></span><i class="fas fa-sign-out-alt fa-lg"></i></div>
+        Log Out <span class="icon"></span><i class="fa-solid fa-right-from-bracket"></i></div>
       <div class="favorite" @click="goToFavorites">
-        Favorite <span class="icon"> <i class="fas fa-star"></i> </span>
+        Favorite <span class="icon"> <i class="fa-solid fa-star"></i> </span>
       </div>
     </div>
   </header>

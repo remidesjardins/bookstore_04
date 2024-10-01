@@ -23,11 +23,14 @@ exports.GetAllUser = async (req, res, next) => {
 exports.GetOneUser = async (req, res, next) => {
 
     const id = req.params.id;
+    if(!id){
+        return res.status(400).json({message:'missing information'});
+    }
 
     try {
 
         const connection = await sql.createConnection(dbconf)
-        const [row] = await connection.execute('SELECT * FROM Users WHERE user_id = ?', [id]);
+        const [row] = await connection.execute('SELECT * FROM users WHERE user_id = ?', [id]);
         await connection.end();
         res.status(200).json(row);
 
@@ -48,11 +51,12 @@ exports.CreateUser = async (req, res, next) => {
 
 
 
-    const hashPassword = bcrypt.hashSync(password, 10);
+
     if(!username || !email || !password || !role){
         res.status(400).json({message:"missing information"});
     }else{
         try {
+            const hashPassword = bcrypt.hashSync(password, 10);
             const connection = await sql.createConnection(dbconf);
             const [result] = await connection.execute(
                 'INSERT INTO users (username, email, password, role) VALUES( ?, ?, ?, ?)',
@@ -60,7 +64,7 @@ exports.CreateUser = async (req, res, next) => {
             )
 
             await connection.end();
-            res.status(200).json(result);
+            res.status(200).json({message:"User created successfully."});
         }catch (error){
             res.status(400).json({message:error});
         }
@@ -76,23 +80,23 @@ exports.UpdateUser = async (req, res, next) => {
 
     const id = req.params.id;
     const {email, password , username, role} = req.body;
-    if (!username || !email || !password || !role) {
-        return res.status(400).send('Tous les champs sont obligatoires');
+    if (!username || !email || !password || !role ||!id) {
+        return res.status(400).send('Missing information');
     }else{
 
         try {
 
             const connection = await sql.createConnection(dbconf)
             const [result] = await connection.execute(
-                'UPDATE Users SET username = ?, email = ?, password = ?, role = ? WHERE user_id = ?',
+                'UPDATE users SET username = ?, email = ?, password = ?, role = ? WHERE user_id = ?',
                 [username, email, password, role, id]
             );
             await connection.end();
             if (result.affectedRows === 0) {
-                return res.status(404).send('Utilisateur non trouvé');
+                return res.status(404).send('User not found');
             }
 
-            res.status(200).send('Utilisateur mis à jour');
+            res.status(200).send('User updated successfully');
 
         }catch (err){
             res.status(400).send({error: err});
@@ -107,18 +111,21 @@ exports.UpdateUser = async (req, res, next) => {
 exports.DeleteUser = async (req, res, next) => {
 
     const id = req.params.id;
+    if(!id){
+        return res.status(400).json({message:'missing information'});
+    }
 
     try {
 
         const connection = await sql.createConnection(dbconf)
-        const [result] = await connection.execute('DELETE FROM Users WHERE user_id = ?', [id]);
+        const [result] = await connection.execute('DELETE FROM users WHERE user_id = ?', [id]);
         await connection.end();
 
         if (result.affectedRows === 0) {
-            return res.status(404).send('Utilisateur non trouvé');
+            return res.status(404).send('User not found');
         }
 
-        res.status(200).send('Utilisateur supprimé');
+        res.status(200).send('User deleted successfully');
 
     }catch (err){
         res.status(400).send({error: err});
@@ -129,6 +136,10 @@ exports.DeleteUser = async (req, res, next) => {
 
 exports.LoginUser = async (req, res, next) => {
     const {email, password} = req.body;
+
+    if(!email || !password){
+        return res.status(400).send('Missing information');
+    }
 
 
     try {
@@ -148,7 +159,8 @@ exports.LoginUser = async (req, res, next) => {
                 }else{
                     res.status(201).json({
                         userId: result[0].user_id,
-                        token: jwt.sign({userId: result[0].user_id, roles:result[0].role}, 'test', {expiresIn: '1h'})
+			role: result[0].role,
+                        token: jwt.sign({userId: result[0].user_id, roles:result[0].role}, 'TOKEN', {expiresIn: '24h'})
                     });
                 }
             })

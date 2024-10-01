@@ -98,16 +98,16 @@ export default {
         console.log("Book ID : ", bookId);
         const token = this.$store.state.userToken;
         if (!userId || !bookId) {
-          throw new Error('Missing userId or bookId');
+          throw new Error('Missing userId or bookId EHEOHEOFEJHF');
         }
 
-        const response = await fetch(`https://bot.servhub.fr/api/favorites/${userId}`, {
+        const response = await fetch(`https://bot.servhub.fr/api/favorites`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
             'Authorization': `Bearer ${this.$store.state.userToken}`, // Include token for auth
           },
-          body: JSON.stringify({ user_id: userId, book_id: bookId }), // Proper payload format
+          body: JSON.stringify({ book_id: bookId, user_id: userId }), // Proper payload format
         });
 
         if (!response.ok) {
@@ -134,13 +134,12 @@ export default {
         }
 
         // Make the DELETE request, including userId in the body if necessary
-        const response = await fetch(`https://bot.servhub.fr/api/favorites/${userId}`, {
+        const response = await fetch(`https://bot.servhub.fr/api/favorites/${bookId}`, {
           method: 'DELETE',
           headers: {
             'Authorization': `Bearer ${token}`,
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({ user_id: userId, book_id: bookId }),  // Include user_id and book_id in the body
         });
         if (response.ok) {
           this.$store.commit('removeFavorite', bookId);  // Remove the book from the Vuex store

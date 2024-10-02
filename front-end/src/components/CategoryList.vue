@@ -1,7 +1,8 @@
 <template>
   <div class="categories-section">
-    <h2>Categories</h2>
-    <div class="categories">
+    <!--<h2>Categories</h2>-->
+    <button @click="slideLeft">‹</button>
+    <div class="categories" ref="categorieSlider">
       <div
           class="category"
           v-for="category in categories"
@@ -11,7 +12,9 @@
         <h2>{{ category }}</h2>
       </div>
     </div>
+    <button @click="slideRight">›</button>
   </div>
+
 </template>
 
 <script>
@@ -20,22 +23,31 @@ export default {
   methods: {
     selectCategory(category) {
       this.$emit('categorySelected', category);
-    }
+    },
+    slideLeft() {
+      this.$refs.categorieSlider.scrollLeft -= 325;
+    },
+    slideRight() {
+      this.$refs.categorieSlider.scrollLeft += 325;
+    },
   }
 };
 </script>
 
 <style scoped>
   .categories-section{
-    margin: .938rem;
+    //margin: .938rem;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+    position: relative;
   }
 
   .categories {
     display: flex;
-    gap: .625rem;
-    padding-bottom: .625rem;
-    overflow-x: auto;
-    scrollbar-width: none;
+    overflow-x: scroll;
+    scroll-behavior: smooth;
+    gap: 1rem;
   }
 
   .categories::-webkit-scrollbar {
@@ -43,9 +55,9 @@ export default {
   }
 
   .category {
-    min-width: 17.5rem;
-    max-width: 17.5rem;
-    height: 17.5rem;
+    min-width: 16.875rem;
+    max-width: 16.875rem;
+    height: 16.875rem;
     background-color: #e0e0e0;
     color: black;
     font-weight: bold;

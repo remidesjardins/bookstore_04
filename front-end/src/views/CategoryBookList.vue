@@ -99,17 +99,18 @@ export default {
   width: 100%;
   height: auto;
   background-color: rgba(255, 255, 255, 0.9);
-  padding: 20px;
-  top: 50px;
+  padding: 1.25rem;
+  top: auto;
   left: 0;
   right: 0;
-  z-index: 999;
+  z-index: 8;
+  box-sizing: border-box;
 }
 
 .close-button {
   position: absolute;
-  top: 10px;
-  right: 10px;
+  top: .625rem;
+  right: .625rem;
   cursor: pointer;
 }
 </style>

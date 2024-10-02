@@ -6,6 +6,14 @@
     </div>
 
     <form @submit.prevent="submitForm">
+      <!-- ISBN on one line -->
+      <div class="form-row">
+        <div class="form-group">
+          <label for="isbn">ISBN</label>
+          <input type="text" id="isbn" v-model="book.isbn" @blur="fetchBookDetails" placeholder="Enter ISBN" required />
+        </div>
+      </div>
+
       <!-- Title and Author on the same line -->
       <div class="form-row">
         <div class="form-group">
@@ -21,10 +29,6 @@
 
       <!-- ISBN, Price, and Category on the same line -->
       <div class="form-row">
-        <div class="form-group">
-          <label for="isbn">ISBN</label>
-          <input type="text" id="isbn" v-model="book.isbn" @blur="fetchBookDetails" placeholder="Enter ISBN" required />
-        </div>
 
         <div class="form-group">
           <label for="price">Price</label>
@@ -34,6 +38,7 @@
         <div class="form-group">
           <label for="category">Category</label>
           <select id="category" v-model="book.category" required>
+            <option value="" disabled selected hidden>Choose a category</option>
             <option v-for="category in categories" :key="category" :value="category">{{ category }}</option>
           </select>
         </div>
@@ -130,14 +135,21 @@ export default {
 </script>
 
 <style scoped>
+
 .add-book-form {
   background: white;
-  padding: 20px;
-  border-radius: 30px;
-  width: 70%;
+  padding: .5rem 1.25rem 0 1.25rem;
+  border-radius: 1.875rem;
+  width: auto;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   position: relative;
+  top: auto;
   overflow: hidden;
+  z-index: 10;
+}
+
+h2 {
+  margin: 0;
 }
 
 .form-header {
@@ -149,7 +161,7 @@ export default {
 .close-btn {
   background: none;
   border: none;
-  font-size: 24px;
+  font-size: 1.5rem;
   cursor: pointer;
   color: gray;
 }
@@ -158,13 +170,12 @@ export default {
 .form-row {
   display: flex;
   justify-content: space-between;
-  margin-bottom: 15px;
+  margin-bottom: .938rem;
 }
 
 /* Inputs and select fields with rounded corners */
 .form-group {
   flex: 1;
-  margin-right: 15px;
 }
 
 .form-group:last-child {
@@ -173,41 +184,133 @@ export default {
 
 .form-group label {
   display: block;
-  margin-bottom: 5px;
+  margin-bottom: .313rem;
   font-weight: bold;
 }
 
 .form-group input,
 .form-group select,
 .form-group textarea {
-  width: 95%;
-  padding: 10px;
+  padding: .625rem;
   border: 1px solid black;
-  border-radius: 25px;
-  font-size: 16px;
+  border-radius: 1.563rem;
+  font-size: 1rem;
+}
+
+[id="author"] {
+  width: 92%;
+}
+
+[id="title"], [id="price"] {
+  width: 80%;
+}
+
+.form-group textarea, [id="isbn"] {
+  width: 96%;
+}
+
+.form-group textarea {
+  margin-bottom: .4rem;
+}
+
+.form-group select {
+  width: 100%;
+  color: #434343;
 }
 
 .form-group input::placeholder,
 .form-group select::placeholder,
-.form-group textarea::placeholder {
+.form-group textarea::placeholder,
+[id="category_placeholder"] {
   color: #434343;
-}
-
-.form-group textarea {
-  resize: vertical;
+  font-family: Arial, sans-serif;
 }
 
 .submit-btn {
-  padding: 10px 20px;
+  padding: .625rem 1.25rem;
   background-color: #a6a5a5;
   color: white;
   border: none;
-  border-radius: 25px;
+  border-radius: 1.563rem;
   cursor: pointer;
-  font-size: 16px;
+  font-size: 1rem;
+  margin-bottom: .7rem;
 }
 
 .submit-btn:hover {
   background-color: #45a049;
+}
+
+@media (max-width: 540px) {
+  .add-book-form {
+    background: white;
+    padding: .5rem 1.25rem 0 1.25rem;
+    border-radius: 1.875rem;
+    width: auto;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    position: relative;
+    top: auto;
+    overflow: hidden;
+  }
+
+  h2 {
+    margin: 0;
+    padding: .1rem 0 .625rem 0;
+  }
+
+  .form-row {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 0;
+  }
+
+  .form-group {
+    flex: 1;
+    margin-bottom: 0.4rem;
+  }
+
+  .form-group label {
+    display: block;
+    margin-bottom: 0.313rem;
+    font-weight: bold;
+  }
+
+  .form-group input,
+  .form-group select,
+  .form-group textarea {
+    padding: 0.625rem;
+    border: 0.063rem solid black;
+    border-radius: 1.563rem;
+    font-size: .9rem;
+  }
+
+  .form-group textarea,
+  [id="isbn"],
+  [id="title"],
+  [id="price"],
+  [id="author"] {
+    width: 92%;
+  }
+
+  .form-group textarea {
+    margin-bottom: 0;
+    height: 1.1rem;
+  }
+
+  .form-group select {
+    width: 100%;
+    color: #434343;
+  }
+
+  .submit-btn {
+    padding: .5rem 1rem;
+    background-color: #a6a5a5;
+    color: white;
+    border: none;
+    border-radius: 1.563rem;
+    cursor: pointer;
+    font-size: .9rem;
+    margin-bottom: .7rem;
+  }
 }
 </style>

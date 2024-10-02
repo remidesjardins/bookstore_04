@@ -27,12 +27,13 @@ export default {
 
 <style scoped>
   .categories-section{
-    margin: 15px;
+    margin: .938rem;
   }
+
   .categories {
     display: flex;
-    gap: 10px;
-    padding-bottom: 10px;
+    gap: .625rem;
+    padding-bottom: .625rem;
     overflow-x: auto;
     scrollbar-width: none;
   }
@@ -42,17 +43,17 @@ export default {
   }
 
   .category {
-    min-width: 250px;
-    max-width: 250px;
-    height: 250px;
+    min-width: 17.5rem;
+    max-width: 17.5rem;
+    height: 17.5rem;
     background-color: #e0e0e0;
     color: black;
     font-weight: bold;
-    border-radius: 20px;
+    border-radius: 1.25rem;
     display: flex;
     cursor: pointer;
-    margin: 20px;
-    font-size: 18px;
+    margin: 1.25rem;
+    font-size: 1.125rem;
     text-align: center;
     transition: background-color 0.3s ease, border-color 0.3s ease;
   }
@@ -62,20 +63,20 @@ export default {
   }
 
   .category.focused {
-    border: 2px solid blue;
+    border: .125rem solid blue;
   }
 
   .category-label {
     background-color: orange;
-    border-radius: 10px;
-    padding: 5px 10px;
-    margin-bottom: 20px;
+    border-radius: .625rem;
+    padding: .313rem .625rem;
+    margin-bottom: 1.25rem;
     color: white;
     font-weight: bold;
-    font-size: 16px;
+    font-size: 1rem;
   }
   .categories h2{
-    font-size: 32px;
+    font-size: 2rem;
     text-align: left;
     font-weight: bold;
   }

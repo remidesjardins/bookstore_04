@@ -36,14 +36,14 @@ export default {
 <style scoped>
 .search-bar {
   flex-grow: 1;
-  margin: 0 20px;
+  margin: 0 1.25rem;
 }
 .search-bar input {
   width: 90%;
-  padding: 10px;
-  font-size: 16px;
-  border: 2px solid black;
-  border-radius: 30px;
+  padding: .625rem;
+  font-size: 1rem;
+  border: .125rem solid black;
+  border-radius: 1.875rem;
   background: #d9a05b;
 }
 .search-bar input::placeholder {

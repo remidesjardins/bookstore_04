@@ -247,6 +247,7 @@ form {
 
 .form-group select {
   margin-right: 0;
+  width: 79.6%;
 }
 
 #role-field {
@@ -295,7 +296,31 @@ button:hover {
   background-color: #a9a9a9;
 }
 
-@media only screen and (max-width: 500px) {
+@media only screen and (max-width: 640px) {
+  .form-row  {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 0;
+  }
 
+  .form-group {
+    margin-bottom: 1.5rem;
+  }
+
+  .form-group select {
+    width: 80%;
+  }
+
+  .password-group i {
+    right: 0.4rem;
+  }
+
+  button {
+    min-width: 50px;
+    max-width: 50px;
+    height: auto;
+    align-items: center;
+  }
 }
 </style>

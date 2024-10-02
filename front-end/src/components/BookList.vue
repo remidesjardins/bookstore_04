@@ -151,10 +151,10 @@ export default {
       }
     },
     slideLeft() {
-      this.$refs.bookSlider.scrollLeft -= 250;
+      this.$refs.bookSlider.scrollLeft -= 325;
     },
     slideRight() {
-      this.$refs.bookSlider.scrollLeft += 250;
+      this.$refs.bookSlider.scrollLeft += 325;
     },
     getBookCover(isbn) {
       if (!isbn) {
@@ -213,23 +213,23 @@ export default {
   display: flex;
   overflow-x: scroll;
   scroll-behavior: smooth;
-  gap: 16px;
+  gap: 1rem;
 }
 
 .book-list {
   display: flex;
   flex-wrap: wrap;
-  gap: 20px;
+  gap: 1.25rem;
 }
 
 .book {
-  min-width: 250px;
-  max-width: 250px;
-  height: 250px;
-  margin: 20px;
+  min-width: 15.625rem;
+  max-width: 15.625rem;
+  height: 15.625rem;
+  margin: 1.25rem;
   text-align: center;
-  padding: 10px;
-  border-radius: 20px;
+  padding: 0.625rem;
+  border-radius: 1.25rem;
   cursor: pointer;
   display: flex;
   flex-direction: column;
@@ -241,53 +241,33 @@ export default {
 }
 
 .book img {
-  width: 130px;
-  height: 195px;
+  width: 7.5rem;
+  height: 11.563rem;
   object-fit: cover;
-  border-radius: 10px;
-  margin-bottom: 5px;
+  border-radius: 0.625rem;
+  margin-bottom: 0.313rem;
 }
 
 .book:hover {
   transform: scale(1.05);
 }
 
-.book-id {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  font-size: 14px;
-  font-weight: lighter;
-  color: black;
-}
-
 .book-title {
-  font-size: 20px;
+  font-size: 1.25rem;
   font-weight: bold;
   text-align: left;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
 }
 
 .book-price {
-  font-size: 16px;
+  font-size: 1rem;
   text-align: left;
 }
 
-.favorite-icon {
-  position: absolute;
-  bottom: 10px;
-  right: 10px;
-  font-size: 30px;
-  cursor: pointer;
-  color: black;
-  transition: color 0.2s ease;
-}
-
-.favorite-icon.added {
-  color: red;
-}
-
 #empty-title {
-  font-size: 28px;
+  font-size: 1.75rem;
   font-weight: bold;
 }
 

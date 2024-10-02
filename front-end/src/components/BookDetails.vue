@@ -6,25 +6,25 @@
       <!-- Left content: Image, Category, Price, Buttons -->
       <div class="left-content">
         <h1 class="book-title">{{ book.title }}</h1>
-        <h3>By {{ book.author }}</h3>
+        <h3 class="book-author">By {{ book.author }}</h3>
         <span class="category-label">{{ book.category }}</span>
         <img :src="coverImage" alt="Book cover" />
-        <div class="price-button-container">
+        <div class="price-container">
           <p class="price">{{ book.price }} $</p>
-          <button
-              class="add-favorite"
-              @click="toggleFavorite(book.book_id)"
-              :class="book.isFavorite ? 'favorite-added' : ''"
-          >
-            {{ book.isFavorite ? "Remove from Favorites" : "Add to Favorites" }}
-          </button>
         </div>
       </div>
 
       <!-- Right content: Summary -->
-      <div class="summary">
+      <div class="summary-button">
         <h3>Summary</h3>
         <p>{{ book.summary }}</p>
+        <button
+            class="add-favorite"
+            @click="toggleFavorite(book.book_id)"
+            :class="book.isFavorite ? 'favorite-added' : ''"
+        >
+          {{ book.isFavorite ? "Remove from Favorites" : "Add to Favorites" }}
+        </button>
       </div>
 
       <!-- Action icons (Modify and Delete) -->
@@ -41,7 +41,6 @@
 
   <div v-if="showUpdateForm" class="overlay">
     <div class="modal">
-      <button @click="goToUpdateBook(book.book_id)">Update</button>
       <UpdateBookForm :bookId="book.book_id" @close="showUpdateForm = false" />
     </div>
   </div>
@@ -227,16 +226,17 @@ export default {
 
 .book-details {
   background-color: white;
-  border-radius: 30px; /* Increase the border-radius to round the corners more */
-  padding: 20px;
-  max-width: 900px;
-  max-height: 90vh;
-  width: 900px;
+  border-radius: 1.875rem; /* Increase the border-radius to round the corners more */
+  padding: 1rem;
+  max-width: 500vw;
+  max-height: 85vh;
+  width: 90vw;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
   position: relative;
+  top: auto;
   z-index: 10;
   overflow: hidden; /* Ensure content stays inside the rounded borders */
 }
@@ -244,35 +244,48 @@ export default {
 .left-content {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  width: 40%;
+  align-items: flex-start;
+  width: 30%;
+  padding: .5rem 0 0 2rem;
 }
 
 .left-content img {
-  width: 150px;
-  margin-bottom: 10px;
+  width: 9.375rem;
+  margin-bottom: .625rem;
+  border-radius: .625rem;
 }
 
 .left-content .book-title {
   text-align: left;
-  font-size: 25px;
+  font-size: 1.563rem;
+  margin: 0;
+  text-overflow: ellipsis;
+  height: auto;
+  width: 38rem;
+  white-space: nowrap;
+  overflow: hidden;
 }
 
-.price-button-container {
+.left-content .book-author {
+  margin-top: .5rem;
+  margin-bottom: 1rem;
+}
+
+.price-container {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: center;
-  margin-top: 20px;
 }
 
 .price {
-  font-size: 24px;
-  margin-bottom: 10px;
+  font-size: 1.17rem;
+  font-weight: bold;
+  margin: .625rem 0;
 }
 
 .add-favorite {
-  width: 100%;
-  padding: 15px;
+  width: 40%;
+  padding: .938rem;
   border: none;
   border-radius: 25px;
   background-color: #d3d3d3;
@@ -289,46 +302,51 @@ export default {
   color: black;
 }
 
-.summary {
-  width: 55%;
-  padding-left: 30px;
+.summary-button {
+  width: 70%;
+  padding-right: 2rem;
 }
 
-.summary h3 {
-  margin-bottom: 10px;
+.summary-button p {
+  overflow: auto;
+  text-overflow: ellipsis;
+  max-height: 14rem;
+}
+
+.summary-button h3 {
+  margin: 4rem 0 .625rem 0;
 }
 
 .close-button {
   position: absolute;
-  top: 20px;
-  right: 20px;
+  top: 1.25rem;
+  right: 1.25rem;
   cursor: pointer;
-
 }
 
 .category-label {
   background-color: orange;
-  border-radius: 10px;
-  padding: 5px 10px;
-  margin-bottom: 20px;
+  border-radius: .625rem;
+  padding: .313rem .625rem;
+  margin-bottom: 1.25rem;
   color: white;
   font-weight: bold;
-  font-size: 16px;
+  font-size: 1rem;
 }
 
 .bottom-right-buttons {
   position: absolute;
-  bottom: 20px;
-  right: 20px;
+  bottom: 1.25rem;
+  right: 1.25rem;
   display: flex;
-  gap: 10px;
+  gap: .625rem;
 }
 
 .icon-button {
   background: none;
   border: none;
   cursor: pointer;
-  font-size: 38px;
+  font-size: 1.5rem;
   color: #007bff;
 }
 
@@ -344,5 +362,102 @@ export default {
   color: darkred;
 }
 
+@media (max-width: 600px) {
+
+  .left-content {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 30%;
+    padding: 0;
+  }
+
+  .left-content .book-title {
+    text-align: left;
+    font-size: 1.1rem;
+    margin: 0;
+    text-overflow: ellipsis;
+    height: auto;
+    width: 15rem;
+    white-space: nowrap;
+    overflow: hidden;
+  }
+
+  .left-content .book-author {
+    margin-top: .5rem;
+    margin-bottom: .5rem;
+    font-size: .9rem;
+    width: 15rem;
+  }
+
+  .left-content img {
+    width: 7rem;
+    margin-bottom: .625rem;
+    margin-top: 1rem;
+    border-radius: .625rem;
+  }
+
+  .category-label {
+    background-color: orange;
+    border-radius: .625rem;
+    padding: .2rem .5rem;
+    margin-bottom: .9rem;
+    color: white;
+    font-weight: bold;
+    font-size: .9rem;
+  }
+
+  .summary-button h3 {
+    margin: 4rem 0 .625rem 0;
+    font-size: .9rem;
+  }
+
+  .summary-button {
+    width: 70%;
+    padding-left: 2rem;
+    padding-right: 1rem;
+  }
+
+  .summary-button p {
+    overflow: auto;
+    text-overflow: ellipsis;
+    max-height: 14rem;
+    font-size: .9rem;
+  }
+
+  .add-favorite {
+    width: 60%;
+    padding: .313rem;
+    border: none;
+    border-radius: .938rem;
+    background-color: #d3d3d3;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+    color: black;
+    font-size: .9rem;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: .625rem;
+  }
+
+  .icon-button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 1.3rem;
+    color: #007bff;
+  }
+
+  .icon-button:hover {
+    color: #0056b3;
+  }
+
+  .delete-button {
+    color: red;
+  }
+
+  .delete-button:hover {
+    color: darkred;
+  }
+}
 
 </style>

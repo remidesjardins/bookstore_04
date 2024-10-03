@@ -287,14 +287,14 @@ export default {
   width: 40%;
   padding: .938rem;
   border: none;
-  border-radius: 25px;
+  border-radius: 1.563rem;
   background-color: #d3d3d3;
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
   color: black;
-  font-size: 18px;
+  font-size: 1.125rem;
   font-weight: bold;
   cursor: pointer;
-  margin-top: 10px;
+  margin-top: .625rem;
 }
 
 .favorite-added {
@@ -365,26 +365,15 @@ export default {
 @media (max-width: 600px) {
 
   .left-content {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    width: 30%;
     padding: 0;
   }
 
   .left-content .book-title {
-    text-align: left;
     font-size: 1.1rem;
-    margin: 0;
-    text-overflow: ellipsis;
-    height: auto;
     width: 15rem;
-    white-space: nowrap;
-    overflow: hidden;
   }
 
   .left-content .book-author {
-    margin-top: .5rem;
     margin-bottom: .5rem;
     font-size: .9rem;
     width: 15rem;
@@ -392,71 +381,37 @@ export default {
 
   .left-content img {
     width: 7rem;
-    margin-bottom: .625rem;
     margin-top: 1rem;
-    border-radius: .625rem;
   }
 
   .category-label {
-    background-color: orange;
-    border-radius: .625rem;
     padding: .2rem .5rem;
     margin-bottom: .9rem;
-    color: white;
-    font-weight: bold;
     font-size: .9rem;
   }
 
   .summary-button h3 {
-    margin: 4rem 0 .625rem 0;
     font-size: .9rem;
   }
 
   .summary-button {
-    width: 70%;
-    padding-left: 2rem;
     padding-right: 1rem;
+    padding-left: 3rem;
   }
 
   .summary-button p {
-    overflow: auto;
-    text-overflow: ellipsis;
-    max-height: 14rem;
     font-size: .9rem;
   }
 
   .add-favorite {
     width: 60%;
     padding: .313rem;
-    border: none;
     border-radius: .938rem;
-    background-color: #d3d3d3;
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
-    color: black;
     font-size: .9rem;
-    font-weight: bold;
-    cursor: pointer;
-    margin-top: .625rem;
   }
 
   .icon-button {
-    background: none;
-    border: none;
-    cursor: pointer;
     font-size: 1.3rem;
-    color: #007bff;
-  }
-
-  .icon-button:hover {
-    color: #0056b3;
-  }
-
-  .delete-button {
-    color: red;
-  }
-
-  .delete-button:hover {
-    color: darkred;
   }
 }
 

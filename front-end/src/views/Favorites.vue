@@ -149,7 +149,7 @@ body {
 h2{
   margin-left: 2rem;
   margin-bottom: 0;
-  padding: 10px;
+  padding: .625rem;
   font-size: 1.75rem;
 }
 
@@ -165,7 +165,7 @@ input[type="text"] {
   justify-content: center;
   align-items: center;
   position: fixed;
-  border-radius: 30px;
+  border-radius: 0;
   top: 0;
   left: 0;
   width: 100%;

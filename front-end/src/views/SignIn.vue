@@ -297,6 +297,12 @@ button:hover {
 }
 
 @media only screen and (max-width: 640px) {
+
+  h2 {
+    margin-top: 0;
+    margin-bottom:1.5rem;
+  }
+
   .form-row  {
     display: flex;
     flex-direction: column;
@@ -305,7 +311,8 @@ button:hover {
   }
 
   .form-group {
-    margin-bottom: 1.5rem;
+    margin-bottom: 1rem;
+    width: auto;
   }
 
   .form-group select {
@@ -316,11 +323,13 @@ button:hover {
     right: 0.4rem;
   }
 
-  button {
-    min-width: 50px;
-    max-width: 50px;
-    height: auto;
-    align-items: center;
+  button.submit-btn,
+  button.login-btn {
+    width: 5rem;
+  }
+
+  #role-field {
+    width: 14rem;
   }
 }
 </style>

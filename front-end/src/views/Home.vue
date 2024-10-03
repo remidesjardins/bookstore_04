@@ -157,17 +157,17 @@ body {
 }
 
 h2{
-  margin-left: 35px;
+  margin-left: 2.188rem;
   margin-bottom: 0;
-  padding: 10px;
-  font-size: 28px;
+  padding: .625rem;
+  font-size: 1.75rem;
 }
 
 input[type="text"] {
   width: 80%;
-  padding: 10px;
+  padding: .625rem;
   border: 1px solid #ccc;
-  border-radius: 5px;
+  border-radius: .313rem;
 }
 
 .overlay {
@@ -175,7 +175,7 @@ input[type="text"] {
   justify-content: center;
   align-items: center;
   position: fixed;
-  border-radius: 30px;
+  border-radius: 1.875rem;
   top: 0;
   left: 0;
   width: 100%;
@@ -185,7 +185,7 @@ input[type="text"] {
 }
 
 .action-icons i {
-  font-size: 40px;
+  font-size: 2.5rem;
   cursor: pointer;
   color: black;
   transition: color 0.2s ease;
@@ -199,8 +199,8 @@ input[type="text"] {
 .header-icons .logout,
 .header-icons .favorite
 .header-icons .home {
-  margin-left: 20px;
-  font-size: 20px;
+  margin-left: 1.25rem;
+  font-size: 1.25rem;
   color: black;
   cursor: pointer;
   display: flex;
@@ -208,7 +208,7 @@ input[type="text"] {
 }
 
 .header-icons .icon {
-  margin-left: 5px;
-  font-size: 30px;
+  margin-left: .313rem;
+  font-size: 1.875rem;
 }
 </style>

@@ -13,16 +13,17 @@
     <SearchBar :searchQuery="searchQuery" @search="emitSearchQuery" />
 
     <div class="header-icons" :class="{ 'mobile-menu': isMenuOpen }">
-      <div class="add-book" @click.stop="showAddBookForm" v-if="this.$store.state.isAdmin">
-        Add a book <span class="icon"><i class="fa-solid fa-plus fa-sm"></i></span></div>
       <div class="home"  @click="goToHome">
         Home <span class="icon"></span><i class="fa-solid fa-house fa-1x"></i>
       </div>
-      <div class="logout" @click="logOut">
-        Log Out <span class="icon"></span><i class="fa-solid fa-right-from-bracket fa-lg"></i></div>
+      <div class="add-book" @click.stop="showAddBookForm" v-if="this.$store.state.isAdmin">
+        Add a book <span class="icon"><i class="fa-solid fa-plus fa-sm"></i></span>
+      </div>
       <div class="favorite" @click="goToFavorites">
         Favorite <span class="icon"> <i class="fa-solid fa-star fa-xs"></i> </span>
       </div>
+      <div class="logout" @click="logOut">
+        Log Out <span class="icon"></span><i class="fa-solid fa-right-from-bracket fa-lg"></i></div>
     </div>
   </header>
 </template>

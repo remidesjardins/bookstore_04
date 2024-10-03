@@ -192,7 +192,7 @@ h2 {
 .form-group select,
 .form-group textarea {
   padding: .625rem;
-  border: 1px solid black;
+  border: .063rem solid black;
   border-radius: 1.563rem;
   font-size: 1rem;
 }
@@ -242,19 +242,7 @@ h2 {
 }
 
 @media (max-width: 540px) {
-  .add-book-form {
-    background: white;
-    padding: .5rem 1.25rem 0 1.25rem;
-    border-radius: 1.875rem;
-    width: auto;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    position: relative;
-    top: auto;
-    overflow: hidden;
-  }
-
   h2 {
-    margin: 0;
     padding: .1rem 0 .625rem 0;
   }
 
@@ -265,22 +253,12 @@ h2 {
   }
 
   .form-group {
-    flex: 1;
     margin-bottom: 0.4rem;
-  }
-
-  .form-group label {
-    display: block;
-    margin-bottom: 0.313rem;
-    font-weight: bold;
   }
 
   .form-group input,
   .form-group select,
   .form-group textarea {
-    padding: 0.625rem;
-    border: 0.063rem solid black;
-    border-radius: 1.563rem;
     font-size: .9rem;
   }
 
@@ -297,20 +275,9 @@ h2 {
     height: 1.1rem;
   }
 
-  .form-group select {
-    width: 100%;
-    color: #434343;
-  }
-
   .submit-btn {
     padding: .5rem 1rem;
-    background-color: #a6a5a5;
-    color: white;
-    border: none;
-    border-radius: 1.563rem;
-    cursor: pointer;
     font-size: .9rem;
-    margin-bottom: .7rem;
   }
 }
 </style>

@@ -50,10 +50,6 @@ export default {
     gap: 1rem;
   }
 
-  .categories::-webkit-scrollbar {
-    display: none;
-  }
-
   .category {
     min-width: 16.875rem;
     max-width: 16.875rem;
@@ -92,4 +88,5 @@ export default {
     text-align: left;
     font-weight: bold;
   }
+
 </style>

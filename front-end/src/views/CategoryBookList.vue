@@ -4,12 +4,21 @@
     <span class="close-button" @click="closePopup">❌</span>
     <h3>Books in {{ selectedCategory }}</h3>
     <BookList :bookList="filteredBooks" @bookSelected="showBookDetailsOverlay"/>
+    <BookDetails
+        v-if="showBookDetails"
+        :book="selectedBook"
+        :categories="categories"
+        @close="closeDetails"
+        @favoriteToggled="toggleFavorite"
+    />
   </div>
 </template>
 
 <script>
 import Header from '../components/Header.vue';
 import BookList from '../components/BookList.vue';
+import CategoryList from "@/components/CategoryList.vue";
+import BookDetails from "@/components/BookDetails.vue";
 
 export default {
   data() {
@@ -17,6 +26,10 @@ export default {
       books: [],
       searchQuery: "",
       selectedCategory: this.$route.params.category, // Get category from route params
+      categories: ["Science Fiction", "Mystery & Thriller", "Children's books", "Historical", "Educational"],
+      showDetails: false,
+      selectedBook: null,
+      showBookDetails: false,
     };
   },
   props: {
@@ -73,8 +86,11 @@ export default {
       this.searchQuery = query;
     },
     showBookDetailsOverlay(book) {
-      // Handle the display of the book details
-      this.$emit('bookSelected', book);
+      this.selectedBook = book; // Set the selected book
+      this.showBookDetails = true; // Show the modal
+    },
+    closeDetails() {
+      this.showBookDetails = false;
     },
     closePopup() {
       this.$router.push('/');
@@ -87,6 +103,8 @@ export default {
     this.fetchBooks();
   },
   components: {
+    BookDetails,
+    CategoryList,
     Header,
     BookList
   },

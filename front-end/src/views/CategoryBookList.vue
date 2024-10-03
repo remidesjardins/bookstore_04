@@ -1,7 +1,7 @@
 <template>
   <Header :searchQuery="searchQuery" @search="handleSearch" />
   <div class="category-popup">
-    <span class="close-button" @click="closePopup">❌</span>
+    <span class="close-button" @click="closePopup"><i class="fa-solid fa-xmark fa-2xl"/></span>
     <h3>Books in {{ selectedCategory }}</h3>
     <BookList :bookList="filteredBooks" @bookSelected="showBookDetailsOverlay"/>
     <BookDetails

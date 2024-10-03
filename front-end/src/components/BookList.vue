@@ -1,3 +1,7 @@
+<!--
+  Project: Book Haven
+  Created by: Alexandre Borny, Maël Castellan, Laura Donato, and Rémi Desjardins
+-->
 <template>
   <div>
     <h2>{{ this.text }}</h2>
@@ -44,6 +48,10 @@ export default {
     };
   },
   methods: {
+    /**
+     * Fetches the list of books from the API and updates the book list.
+     * It also fetches book cover images for each book.
+     */
     fetchBooks() {
       console.log(this.$store.state.userToken);
       const myHeaders = new Headers();
@@ -69,9 +77,18 @@ export default {
           })
           .catch((error) => console.log("ICI :", error));
     },
+    /**
+     * Emits the selected book to the parent component.
+     * @param {Object} book - The book object selected by the user.
+     */
     selectBook(book) {
       this.$emit("bookSelected", book);
     },
+    /**
+     * Checks if a book is in the user's favorites.
+     * @param {String} bookId - The ID of the book to check.
+     * @returns {Boolean} - True if the book is a favorite, false otherwise.
+     */
     isFavorite(bookId) {
       const favorites = this.$store.state.favoriteBooks;
       if (Array.isArray(favorites)) {
@@ -80,6 +97,11 @@ export default {
         return false; // Default to not a favorite if the favorites list is not an array
       }
     },
+    /**
+     * Toggles the favorite status of a book.
+     * If the book is a favorite, it unfavorites it; otherwise, it adds it to favorites.
+     * @param {String} bookId - The ID of the book to toggle favorite status.
+     */
     async toggleFavorite(bookId) {
       if (this.isFavorite(bookId)) {
         // If the book is already a favorite, unfavorite it
@@ -89,6 +111,10 @@ export default {
         await this.favoriteBook(bookId);
       }
     },
+    /**
+     * Adds a book to the user's favorites.
+     * @param {String} bookId - The ID of the book to be added to favorites.
+     */
     async favoriteBook(bookId) {
       try {
         const userId = this.$store.state.userId;
@@ -121,6 +147,10 @@ export default {
         console.error('Error:', error);
       }
     },
+    /**
+     * Removes a book from the user's favorites.
+     * @param {String} bookId - The ID of the book to be removed from favorites.
+     */
     async unfavoriteBook(bookId) {
       try {
         const userId = this.$store.state.userId;
@@ -150,12 +180,24 @@ export default {
         console.error('Error:', error);
       }
     },
+    /**
+     * Scrolls the book slider to the left.
+     */
     slideLeft() {
       this.$refs.bookSlider.scrollLeft -= 325;
     },
+    /**
+     * Scrolls the book slider to the right.
+     */
     slideRight() {
       this.$refs.bookSlider.scrollLeft += 325;
     },
+    /**
+     * Fetches the book cover from the Google Books API.
+     * If the cover is not available, it uses a placeholder image.
+     * @param {String} isbn - The ISBN of the book to get the cover image for.
+     * @returns {String} - The URL of the book cover image or a placeholder image.
+     */
     getBookCover(isbn) {
       if (!isbn) {
         return "https://via.placeholder.com/150?text=No+Cover";
@@ -201,14 +243,14 @@ export default {
 </script>
 
 <style scoped>
-
+/* Container for the entire book list, aligns items at the center and hides overflow */
 .book-list-container {
   display: flex;
   align-items: center;
   overflow: hidden;
   position: relative;
 }
-
+/* Styles for the book slider, allowing horizontal scrolling with smooth behavior */
 .book-slider {
   display: flex;
   overflow-x: scroll;
@@ -216,12 +258,14 @@ export default {
   gap: 1rem;
 }
 
+/* Defines the structure for the book list, supporting wrapping and spacing */
 .book-list {
   display: flex;
   flex-wrap: wrap;
   gap: 1.25rem;
 }
 
+/* Individual book styling, including dimensions, margin, and other visual properties */
 .book {
   min-width: 15.625rem;
   max-width: 15.625rem;
@@ -240,6 +284,7 @@ export default {
   transition: transform 0.2s ease;
 }
 
+/* Styling for the book image, ensuring it fits well within the card */
 .book img {
   width: 7.5rem;
   height: 11.563rem;
@@ -248,10 +293,12 @@ export default {
   margin-bottom: 0.313rem;
 }
 
+/* Enlarges the book card slightly when hovered for a dynamic effect */
 .book:hover {
   transform: scale(1.05);
 }
 
+/* Book title styling, including font size, weight, and text behavior */
 .book-title {
   font-size: 1.25rem;
   font-weight: bold;
@@ -261,16 +308,19 @@ export default {
   overflow: hidden;
 }
 
+/* Book price styling, similar to the title but smaller */
 .book-price {
   font-size: 1rem;
   text-align: left;
 }
 
+/* Styling for an empty state title, making it large and bold */
 #empty-title {
   font-size: 1.75rem;
   font-weight: bold;
 }
 
+/* Styles for the star icon, positioned in the corner and interactive */
 .star-icon {
   cursor: pointer;
   font-size: 24px; /* Larger font size for better visibility */
@@ -280,10 +330,12 @@ export default {
   transition: color 0.3s ease;
 }
 
+/* Black color when the star icon indicates a favorite */
 .star-icon.favorite {
   color: black;
 }
 
+/* Grey color when the star icon indicates it's not a favorite */
 .star-icon.not-favorite {
   color: grey;
 }

@@ -1,3 +1,7 @@
+<!--
+  Project: Book Haven
+  Created by: Alexandre Borny, Maël Castellan, Laura Donato, and Rémi Desjardins
+-->
 <template>
   <div class="categories-section">
     <!--<h2>Categories</h2>-->
@@ -21,12 +25,22 @@
 export default {
   props: ["categories", "selectedCategory"],
   methods: {
+    /**
+     * Emits the selected category to the parent component.
+     * @param {Object} category - The category selected by the user.
+     */
     selectCategory(category) {
       this.$emit('categorySelected', category);
     },
+    /**
+     * Scrolls the category slider to the left.
+     */
     slideLeft() {
       this.$refs.categorieSlider.scrollLeft -= 325;
     },
+    /**
+     * Scrolls the category slider to the right.
+     */
     slideRight() {
       this.$refs.categorieSlider.scrollLeft += 325;
     },
@@ -35,6 +49,7 @@ export default {
 </script>
 
 <style scoped>
+/* Section containing categories, aligns items and hides overflow */
   .categories-section{
     //margin: .938rem;
     display: flex;
@@ -43,6 +58,7 @@ export default {
     position: relative;
   }
 
+/* Container for scrolling categories, with smooth horizontal scroll */
   .categories {
     display: flex;
     overflow-x: scroll;
@@ -50,6 +66,7 @@ export default {
     gap: 1rem;
   }
 
+/* Individual category styling, including dimensions, color, and interactive effects */
   .category {
     min-width: 16.875rem;
     max-width: 16.875rem;
@@ -66,14 +83,17 @@ export default {
     transition: background-color 0.3s ease, border-color 0.3s ease;
   }
 
-  .category.selected {
+/* Styling for the selected category, changing the background color to orange */
+.category.selected {
     background-color: orange;
   }
 
+/* Styling for focused category, adding a blue border */
   .category.focused {
     border: .125rem solid blue;
   }
 
+/* Label styling for category, with rounded corners and padding */
   .category-label {
     background-color: orange;
     border-radius: .625rem;
@@ -83,6 +103,8 @@ export default {
     font-weight: bold;
     font-size: 1rem;
   }
+
+/* Heading styling for the categories section */
   .categories h2{
     font-size: 2rem;
     text-align: left;

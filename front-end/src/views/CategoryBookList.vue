@@ -1,9 +1,23 @@
+<!--
+  Project: Book Haven
+  Created by: Alexandre Borny, Maël Castellan, Laura Donato, and Rémi Desjardins
+-->
+
 <template>
+  <!-- Header component with search functionality -->
   <Header :searchQuery="searchQuery" @search="handleSearch" />
+
+  <!-- Popup for displaying books in the selected category -->
   <div class="category-popup">
     <span class="close-button" @click="closePopup"><i class="fa-solid fa-xmark fa-2xl"/></span>
+
+    <!-- Title indicating the selected category -->
     <h3>Books in {{ selectedCategory }}</h3>
+
+    <!-- BookList component displaying books filtered by category -->
     <BookList :bookList="filteredBooks" @bookSelected="showBookDetailsOverlay"/>
+
+    <!-- Book Details Overlay for selected book -->
     <BookDetails
         v-if="showBookDetails"
         :book="selectedBook"
@@ -40,6 +54,10 @@ export default {
     fromFavorites: Boolean,
   },
   computed: {
+    /**
+     * Filters the list of books based on the search query and selected category.
+     * @returns {Array} - Array of filtered books.
+     */
     filteredBooks() {
       let booksToFilter = [];
 
@@ -52,9 +70,12 @@ export default {
         booksToFilter = this.books;
       }
 
+      // Filter books by selected category and search query
       if (this.searchQuery.trim() === "") {
         return booksToFilter.filter(book => book.category === this.$route.params.category);
       }
+
+
       return booksToFilter.filter(book =>
           book.category === this.$route.params.category &&
           (book.title.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
@@ -63,6 +84,9 @@ export default {
     },
   },
   methods: {
+    /**
+     * Fetches the list of books from the API and updates the local state.
+     */
     fetchBooks() {
       const myHeaders = new Headers();
       myHeaders.append("Content-Type", "application/json");
@@ -78,29 +102,49 @@ export default {
           .then((response) => response.json())
           .then((result) => {
             console.log("Result: ", result);
-            this.books = result;
+            this.books = result; // Update the books array with the fetched result
           })
           .catch((error) => console.error(error));
     },
+
+    /**
+     * Updates the search query based on user input.
+     * @param {string} query - The search query to set.
+     */
     handleSearch(query) {
       this.searchQuery = query;
     },
+
+    /**
+     * Displays the details overlay for the selected book.
+     * @param {Object} book - The selected book object.
+     */
     showBookDetailsOverlay(book) {
       this.selectedBook = book; // Set the selected book
       this.showBookDetails = true; // Show the modal
     },
+    /**
+     * Closes the book details overlay.
+     */
     closeDetails() {
       this.showBookDetails = false;
     },
+    /**
+     * Closes the category popup and navigates back to the home page.
+     */
     closePopup() {
       this.$router.push('/');
     },
+    /**
+     * Returns the title to be displayed based on the search query.
+     * @returns {string} - Title for the search results or favorites.
+     */
     searchTitle() {
       return this.searchQuery.trim() === "" ? "Recent search" : "Search Result";
     },
   },
   mounted() {
-    this.fetchBooks();
+    this.fetchBooks(); // Fetch books when the component is mounted
   },
   components: {
     BookDetails,
@@ -112,6 +156,7 @@ export default {
 </script>
 
 <style scoped>
+/* Styles for the category popup container */
 .category-popup {
   position: fixed;
   width: 100%;
@@ -125,6 +170,7 @@ export default {
   box-sizing: border-box;
 }
 
+/* Styles for the close button in the popup */
 .close-button {
   position: absolute;
   top: .625rem;

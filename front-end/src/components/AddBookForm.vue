@@ -1,10 +1,16 @@
+<!--
+  Project: Book Haven
+  Created by: Alexandre Borny, Maël Castellan, Laura Donato, and Rémi Desjardins
+-->
 <template>
   <div class="add-book-form">
     <div class="form-header">
       <h2>Add Book</h2>
+      <!-- Emit event to close the form when the button is clicked -->
       <button @click="$emit('close-form')" class="close-btn"><i class="fa-solid fa-xmark fa-xl"></i></button>
     </div>
 
+    <!-- Handle form submission -->
     <form @submit.prevent="submitForm">
       <!-- ISBN on one line -->
       <div class="form-row">
@@ -50,6 +56,7 @@
         <textarea id="summary" v-model="book.summary" placeholder="Enter book summary" required></textarea>
       </div>
 
+      <!-- Submit button -->
       <button type="submit" class="submit-btn">Add Book</button>
     </form>
   </div>
@@ -66,12 +73,20 @@ export default {
         price: '',
         category: '',
         summary: '',
-        cover_image: 'https://via.placeholder.com/150?text=No+Cover'
+        cover_image: 'https://via.placeholder.com/150?text=No+Cover' // Placeholder image for the book cover
       },
       categories: ["Science Fiction", "Mystery & Thriller", "Children's books", "Historical", "Educational"]
     };
   },
   methods: {
+    /**
+     * Fetches book details from the Google Books API using the book's ISBN.
+     * Automatically populates the book form with the retrieved details like title, author, category, summary, and cover image.
+     * If no details are found or if there's an error, it logs the error in the console.
+     *
+     * @async
+     * @returns {Promise<void>} Resolves when the book details are fetched and the form is updated.
+     */
     async fetchBookDetails() {
       const isbn = this.book.isbn;
       if (isbn) {
@@ -93,7 +108,16 @@ export default {
         }
       }
     },
-    async submitForm() {
+    /**
+     * Submits the book form data to the backend API to add a new book.
+     * Sends a POST request to the backend with the book details and the user's authorization token.
+     * If successful, an alert confirms the book was added, the form is reset, and the form is closed.
+     * If there's an error, an alert displays the error message.
+     *
+     * @async
+     * @returns {Promise<void>} Resolves when the form data is submitted successfully.
+     */
+    async submitForm() { // Submit form data to the backend API
       try {
         console.log(this.book);
         const token = this.$store.state.userToken;
@@ -119,6 +143,12 @@ export default {
         console.error("Error:", error);
       }
     },
+    /**
+     * Resets the book form to its initial state, clearing all input fields.
+     * Resets the book object to an empty form with a default cover image.
+     *
+     * @returns {void} No return value.
+     */
     resetForm() {
       this.book = {
         title: '',
@@ -136,6 +166,7 @@ export default {
 
 <style scoped>
 
+/* Styling for the add book form container */
 .add-book-form {
   background: white;
   padding: .5rem 1.25rem 0 1.25rem;
@@ -148,16 +179,19 @@ export default {
   z-index: 10;
 }
 
+/* Heading styles */
 h2 {
   margin: 0;
 }
 
+/* Header for the form with close button */
 .form-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
+/* Styling for the close button */
 .close-btn {
   background: none;
   border: none;
@@ -166,28 +200,31 @@ h2 {
   color: gray;
 }
 
-/* Flexbox for rows */
+/* Flexbox for rows in the form */
 .form-row {
   display: flex;
   justify-content: space-between;
   margin-bottom: .938rem;
 }
 
-/* Inputs and select fields with rounded corners */
+/* Styling for form groups */
 .form-group {
   flex: 1;
 }
 
+/* Removes margin from the last form group */
 .form-group:last-child {
   margin-right: 0;
 }
 
+/* Label styling for form fields */
 .form-group label {
   display: block;
   margin-bottom: .313rem;
   font-weight: bold;
 }
 
+/* Input, select, and textarea styles */
 .form-group input,
 .form-group select,
 .form-group textarea {
@@ -197,6 +234,7 @@ h2 {
   font-size: 1rem;
 }
 
+/* Specific width adjustments for inputs */
 [id="author"] {
   width: 92%;
 }
@@ -205,19 +243,23 @@ h2 {
   width: 80%;
 }
 
+/* Margin for the textarea */
 .form-group textarea, [id="isbn"] {
   width: 96%;
 }
 
+/* Margin for the textarea */
 .form-group textarea {
   margin-bottom: .4rem;
 }
 
+/* Select field styling */
 .form-group select {
   width: 100%;
   color: #434343;
 }
 
+/* Placeholder text styles */
 .form-group input::placeholder,
 .form-group select::placeholder,
 .form-group textarea::placeholder,
@@ -226,6 +268,7 @@ h2 {
   font-family: Arial, sans-serif;
 }
 
+/* Submit button styling */
 .submit-btn {
   padding: .625rem 1.25rem;
   background-color: #a6a5a5;
@@ -237,31 +280,37 @@ h2 {
   margin-bottom: .7rem;
 }
 
+/* Submit button hover effect */
 .submit-btn:hover {
   background-color: #45a049;
 }
 
+/* Media query for screens smaller than 540px */
 @media (max-width: 540px) {
   h2 {
     padding: .1rem 0 .625rem 0;
   }
 
+  /* Stack form rows vertically on smaller screens */
   .form-row {
     display: flex;
     flex-direction: column;
     margin-bottom: 0;
   }
 
+  /* Margin for form groups on smaller screens */
   .form-group {
     margin-bottom: 0.4rem;
   }
 
+  /* Adjust font size for inputs, selects, and textareas */
   .form-group input,
   .form-group select,
   .form-group textarea {
     font-size: .9rem;
   }
 
+  /* Specific width adjustments for inputs on mobile */
   .form-group textarea,
   [id="isbn"],
   [id="title"],
@@ -270,11 +319,13 @@ h2 {
     width: 92%;
   }
 
+  /* Adjusts textarea size for mobile */
   .form-group textarea {
     margin-bottom: 0;
     height: 1.1rem;
   }
 
+  /* Adjusts submit button padding and font size for mobile */
   .submit-btn {
     padding: .5rem 1rem;
     font-size: .9rem;

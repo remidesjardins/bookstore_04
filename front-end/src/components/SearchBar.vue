@@ -1,3 +1,7 @@
+<!--
+  Project: Book Haven
+  Created by: Alexandre Borny, Maël Castellan, Laura Donato, and Rémi Desjardins
+-->
 <template>
   <div class="search-bar">
     <input
@@ -13,11 +17,20 @@
 export default {
   props: ["searchQuery"],
   methods: {
+    /**
+     * Emit the search query to the parent component.
+     * @param {string} query - The search query entered by the user.
+     * @returns {void}
+     */
     emitSearch(query) {
       this.$emit("search", query);
     }
   },
   computed: {
+    /**
+     * Filter the list of books based on the search query.
+     * @returns {Array} - An array of books that match the search query.
+     */
     filteredBooks() {
       console.log("Test SearchBar");
       // Only return books that match the search query
@@ -34,10 +47,13 @@ export default {
 </script>
 
 <style scoped>
+/* Styling for the search bar container */
 .search-bar {
   flex-grow: 1;
   margin: 0 1.25rem;
 }
+
+/* Styling for the input field inside the search bar */
 .search-bar input {
   width: 90%;
   padding: .625rem;
@@ -46,6 +62,8 @@ export default {
   border-radius: 1.875rem;
   background: #d9a05b;
 }
+
+/* Styling for the placeholder text inside the input field */
 .search-bar input::placeholder {
   color: black;
 }

@@ -1,3 +1,8 @@
+<!--
+  Project: Book Haven
+  Created by: Alexandre Borny, Maël Castellan, Laura Donato, and Rémi Desjardins
+-->
+
 <template>
   <header class="app-header">
     <div class="logo">
@@ -61,6 +66,9 @@ export default {
   methods: {
     ...mapActions(['login']), // Map Vuex login action
 
+    /**
+     * Handles user login by dispatching the login action.
+     */
     async handleLogin() {
       // Reset previous error messages
       this.usernameOrEmailError = '';
@@ -78,9 +86,15 @@ export default {
       }
 
     },
+    /**
+     * Toggles the visibility of the password input field.
+     */
     togglePasswordVisibility() {
       this.showPassword = !this.showPassword; // Toggle password visibility
     },
+    /**
+     * Navigates the user to the Sign Up page.
+     */
     goToSignUp() {
       this.$router.push('/register');
     }
@@ -89,6 +103,7 @@ export default {
 </script>
 
 <style scoped>
+/* App Header Styles */
 .app-header {
   display: flex;
   background-color: #d9a05b;
@@ -102,7 +117,7 @@ export default {
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
 }
 
-/* Style for the logo */
+/* Logo Styles */
 .logo {
   font-size: 2.5rem; /* Increased font size for emphasis */
   padding: .65rem;
@@ -116,7 +131,7 @@ export default {
   letter-spacing: .2rem; /* Adds some spacing between letters */
 }
 
-/* Adjust login container */
+/* Login Container Styles */
 .login-container {
   display: flex;
   flex-direction: column;
@@ -128,12 +143,14 @@ export default {
   box-sizing: border-box;
 }
 
+/* Heading Styles */
 h2 {
   font-size: 1.75rem;
   margin: .8rem 0 2rem 0;
   font-weight: bold;
 }
 
+/* Form Styles */
 form {
   width: 100%;
   max-width: 25rem; /* Width adjustment for the login form */
@@ -142,6 +159,7 @@ form {
   align-items: center;
 }
 
+/* Form Group Styles */
 .form-group {
   width: 80%;
   margin-bottom: 1.5rem;
@@ -159,6 +177,7 @@ form {
   background-color: #f9f9f9;
 }
 
+/* Password Group Styles */
 .password-group {
   position: relative;
 }
@@ -171,6 +190,7 @@ form {
   cursor: pointer;
 }
 
+/* Submit Button Styles */
 button.submit-btn {
   width: 25%;
   padding: .75rem;
@@ -185,15 +205,10 @@ button.submit-btn {
 }
 
 button.submit-btn:hover {
-  background-color: #a9a9a9;
+  background-color: #a9a9a9; /* Hover effect for submit button */
 }
 
-.forgot-password a {
-  color: #000;
-  text-decoration: none;
-}
-
-/* New Sign-up section */
+/* New Sign-up Section Styles */
 .no-account {
   margin-top: 2rem;
   font-size: .8rem;
@@ -201,6 +216,7 @@ button.submit-btn:hover {
   text-align: center;
 }
 
+/* Button Styles */
 button {
   width: 25%;
   padding: .75rem;
@@ -215,15 +231,17 @@ button {
 }
 
 button.sign-in-btn:hover {
-  background-color: #a9a9a9;
+  background-color: #a9a9a9; /* Hover effect for sign-in button */
 }
 
+/* Placeholder Input Styles */
 input::placeholder {
   color: #857f7f;
   font-size: .8rem;
   text-align: left;
 }
 
+/* Server Error Message Styles */
 .server-error {
   color: #e74c3c;
   font-size: .8rem;

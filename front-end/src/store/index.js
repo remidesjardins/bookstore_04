@@ -2,7 +2,7 @@ import { createStore } from 'vuex';
 import router from '@/router'
 
 const store = createStore({
-    state: {
+    state: { // Get all element stock in the store
         isAuthenticated: !!localStorage.getItem('authToken'),
         userToken: localStorage.getItem('authToken'),
         userId: localStorage.getItem('userId'),
@@ -10,14 +10,14 @@ const store = createStore({
         isAdmin: localStorage.getItem('isAdmin'),
     },
     mutations: {
-        login(state, { authToken, userId, isAdmin }) {
+        login(state, { authToken, userId, isAdmin }) { // Store information get during login
             state.isAuthenticated = true;
             state.userToken = authToken;
             state.userId = userId;
             state.favoriteBooks = [];
             state.isAdmin = isAdmin;
         },
-        logout(state) {
+        logout(state) { // Empty store information
             state.isAuthenticated = false;
             state.userToken = '';
             state.userId = undefined;
@@ -32,13 +32,13 @@ const store = createStore({
             state.favoriteBooks.push(book); // Add the book to the list
             localStorage.setItem('favoriteBooks', JSON.stringify(state.favoriteBooks)); // Persist favorites after adding
         },
-        removeFavorite(state, bookId) {
+        removeFavorite(state, bookId) { // Remove the book to the list
             state.favoriteBooks = state.favoriteBooks.filter(book => book.book_id !== bookId);
             localStorage.setItem('favoriteBooks', JSON.stringify(state.favoriteBooks)); // Persist favorites after removal
         },
     },
     actions: {
-        async login({ commit }, { email, password }) {  // Destructure the payload
+        async login({ commit }, { email, password }) {  // Function to login with password and email
             const myHeaders = new Headers();
             myHeaders.append("Content-Type", "application/json");
 
@@ -79,7 +79,7 @@ const store = createStore({
                 throw error;
             }
         },
-        async fetchFavoriteBooks({ state, commit }) {
+        async fetchFavoriteBooks({ state, commit }) { // Function to create a new favorite
             try {
                 const userId = state.userId;
                 const token = state.userToken;
@@ -87,7 +87,7 @@ const store = createStore({
                 const requestOptions = {
                     method: "GET",
                     headers: {
-                        "Authorization": `Bearer ${token}`,  // Add the Authorization header
+                        "Authorization": `Bearer ${token}`,
                         "Content-Type": "application/json",
                     },
                 };
@@ -104,7 +104,7 @@ const store = createStore({
                 console.error("Error fetching favorites:", error);
             }
         },
-        initFavorites({ commit }) {
+        initFavorites({ commit }) { // Fetch favorite store in local storage
             const storedFavorites = localStorage.getItem('favoriteBooks');
             if (storedFavorites) {
                 commit('setFavorites', JSON.parse(storedFavorites)); // Restore from localStorage
@@ -112,9 +112,9 @@ const store = createStore({
                 this.dispatch('fetchFavoriteBooks'); // Fetch from API if not found in localStorage
             }
         },
-        logout({ commit }) {
+        logout({ commit }) { // Function to logout
             commit('logout');
-            localStorage.removeItem('authToken'); // Supprimez le token
+            localStorage.removeItem('authToken'); // Delete the token
             !router.push('/login');
         },
     },

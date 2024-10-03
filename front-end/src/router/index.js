@@ -11,7 +11,7 @@ const routes = [
         path: '/',
         name: 'Home',
         component: Home,
-        meta: { requiresAuth: true }, // Indique que la route nénpmcessite une authentification
+        meta: { requiresAuth: true }, // Indicate whether authentication is required
     },
     {
 
@@ -21,20 +21,20 @@ const routes = [
         props: (route) => ({
             category: route.params.category,
         }),
-        meta: { requiresAuth: true }, // Indique que la route nécessite une authentification
+        meta: { requiresAuth: true }, // Indicate whether authentication is required
     },
     {
         path: '/update-book/:bookId',
         name: 'UpdateBook',
         component: () => import('@/components/UpdateBookForm.vue'), // Adjust path if needed
         props: true,
-        meta: { requiresAuth: true }, // Indique que la route nécessite une authentification
+        meta: { requiresAuth: true }, // Indicate whether authentication is required
     },
     {
         path: '/favorites',
         name: 'Favorites',
         component: Favorites,
-        meta: { requiresAuth: true }, // Indique que la route nécessite une authentification
+        meta: { requiresAuth: true }, // Indicate whether authentication is required
     },
     {
         path: '/login',
@@ -53,13 +53,13 @@ const router = createRouter({
     routes,
 })
 
-router.beforeEach((to, from, next) => {
+router.beforeEach((to, from, next) => { //Function to control authentication for routes
     const requiresAuth = to.matched.some(record => record.meta.requiresAuth);
     if (requiresAuth && !store.state.isAuthenticated) {
-        // L'utilisateur n'est pas authentifié
-        next('/login'); // Redirige vers la page de connexion
+
+        next('/login');
     } else {
-        // L'utilisateur est authentifié ou la route ne nécessite pas d'authentification
+
         next();
     }
 });

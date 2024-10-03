@@ -1,9 +1,17 @@
+<!--
+  Project: Book Haven
+  Created by: Alexandre Borny, Maël Castellan, Laura Donato, and Rémi Desjardins
+-->
+
 <template>
+  <!-- Simple header for sign-in and log-in page -->
   <header class="app-header">
     <div class="logo">
       <span>BOOK HAVEN</span>
     </div>
   </header>
+
+
   <div class="signup-container">
     <h2>Create an account</h2>
     <form @submit.prevent="handleSubmit">
@@ -17,7 +25,7 @@
         </div>
       </div>
 
-      <!-- Password and Confirm Password in the same row --><!-- Password and Confirm Password in the same row -->
+      <!-- Password and Confirm Password in the same row -->
       <div class="form-row">
         <div class="form-group password-group">
           <input :type="showPassword ? 'text' : 'password'" v-model="password" placeholder="Password" required />
@@ -40,7 +48,6 @@
 
       <!-- Submit and Log In buttons -->
       <button type="submit" class="submit-btn">Sign In</button>
-
       <p class="already-account">You already have an account?</p>
       <button type="button" class="login-btn" @click="goToLogin">Log In</button>
     </form>
@@ -70,25 +77,42 @@ export default {
     };
   },
   methods: {
+    /**
+     * Navigates to the login page.
+     */
     goToLogin() {
       this.$router.push('/Login');
     },
+    /**
+     * Toggles visibility of the password input field.
+     */
     togglePasswordVisibility() {
       this.showPassword = !this.showPassword;
     },
+    /**
+     * Toggles visibility of the confirm password input field.
+     */
     toggleConfirmPasswordVisibility() {
       this.showConfirmPassword = !this.showConfirmPassword;
     },
+    /**
+     * Validates the email format.
+     * @param {string} email - The email to validate.
+     * @returns {boolean} - Returns true if the email is valid, otherwise false.
+     */
     validateEmail(email) {
       const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
       return regex.test(email);
     },
+    /**
+     * Handles form submission and performs validation.
+     */
     async handleSubmit() {
       // Reset previous error messages
       this.emailError = '';
       this.usernameError = '';
       this.passwordError = '';
-      this.confirmPasswordError = '';  // Reset confirm password error
+      this.confirmPasswordError = ''
       this.roleError = '';
       this.serverError = '';
       this.successMessage = '';
@@ -134,6 +158,7 @@ export default {
           role: this.role,
         };
 
+        // Submit the form to the server
         const myHeaders = new Headers();
         myHeaders.append("Content-Type", "application/json");
         myHeaders.append("Authorization", `Bearer ${this.$store.state.userToken}`);
@@ -144,7 +169,7 @@ export default {
           body: JSON.stringify(formData),
           redirect: "follow"
         };
-
+        // Send the form data to the API
         fetch("https://bot.servhub.fr/api/users", requestOptions)
             .then((response) => response.json())
             .then((result) => {
@@ -163,6 +188,7 @@ export default {
 </script>
 
 <style scoped>
+/* App header styles */
 .app-header {
   display: flex;
   background-color: #d9a05b;
@@ -176,7 +202,7 @@ export default {
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
 }
 
-/* Style for the logo */
+/* Logo styles */
 .logo {
   font-size: 2.5rem;
   padding: .65rem;
@@ -190,6 +216,7 @@ export default {
   letter-spacing: .2rem;
 }
 
+/* Signup Container Styles */
 .signup-container {
   display: flex;
   flex-direction: column;
@@ -207,6 +234,7 @@ h2 {
   font-weight: bold;
 }
 
+/* Form Styles */
 form {
   width: 100%;
   max-width: 50rem; /* Increase width for multiple columns */
@@ -223,7 +251,7 @@ form {
 }
 
 .form-group {
-  width: 45%; /* Allow two fields to fit side-by-side */
+  width: 45%;
   position: relative;
 }
 
@@ -239,6 +267,7 @@ form {
   background-color: #f9f9f9;
 }
 
+/* Placeholder Input Styles */
 .form-group input::placeholder{
   color: #857f7f;
   font-size: .8rem;
@@ -255,6 +284,7 @@ form {
   justify-content: center;
 }
 
+/* Password Group Styles */
 .password-group {
   position: relative;
 }
@@ -267,6 +297,7 @@ form {
   cursor: pointer;
 }
 
+/* Button Styles */
 button.submit-btn,
 button.login-btn {
   width: 12.5%;
@@ -285,6 +316,11 @@ button.submit-btn {
   margin-top: 1.5rem;
 }
 
+button:hover {
+  background-color: #a9a9a9;
+}
+
+/* Already an account text style */
 .already-account {
   margin-top: .8rem;
   font-size: .8rem;
@@ -292,17 +328,15 @@ button.submit-btn {
   text-align: center;
 }
 
-button:hover {
-  background-color: #a9a9a9;
-}
-
+/* Responsive Styles for Mobile Devices */
 @media only screen and (max-width: 640px) {
-
+  /* Adjust Heading Margin */
   h2 {
     margin-top: 0;
     margin-bottom:1.5rem;
   }
 
+  /* Adjust Form Row for Column Layout */
   .form-row  {
     display: flex;
     flex-direction: column;
@@ -310,6 +344,7 @@ button:hover {
     margin-bottom: 0;
   }
 
+  /* Adjust Form Group for Full Width */
   .form-group {
     margin-bottom: 1rem;
     width: auto;
@@ -319,15 +354,18 @@ button:hover {
     width: 80%;
   }
 
+  /* Adjust Password Icon Position */
   .password-group i {
     right: 0.4rem;
   }
 
+  /* Adjust Button Width */
   button.submit-btn,
   button.login-btn {
     width: 5rem;
   }
 
+  /* Adjust Role Field Width */
   #role-field {
     width: 14rem;
   }

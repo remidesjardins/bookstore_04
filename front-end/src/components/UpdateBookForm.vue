@@ -1,12 +1,19 @@
+<!--
+  Project: Book Haven
+  Created by: Alexandre Borny, Maël Castellan, Laura Donato, and Rémi Desjardins
+-->
 <template>
+
+  <!-- Main container for the add/update book form -->
   <div class="add-book-form">
     <div class="form-header">
       <h2>Update Book</h2>
       <button @click="$emit('close')" class="close-btn"><i class="fa-solid fa-xmark fa-xl"></i></button>
     </div>
 
+    <!-- Form for updating book details -->
     <form @submit.prevent="updateBook">
-      <!-- Title and Author on the same line -->
+      <!-- Row for ISBN input -->
       <div class="form-row">
         <div class="form-group">
           <label for="isbn">ISBN</label>
@@ -14,6 +21,7 @@
         </div>
       </div>
 
+      <!-- Row for Title and Author inputs -->
       <div class="form-row">
         <div class="form-group">
           <label for="title">Title</label>
@@ -26,9 +34,8 @@
         </div>
       </div>
 
-      <!-- ISBN, Price, and Category on the same line -->
+      <!-- Row for Price and Category inputs -->
       <div class="form-row">
-
         <div class="form-group">
           <label for="price">Price</label>
           <input type="number" id="price" v-model="book.price" placeholder="Enter price" required />
@@ -42,7 +49,7 @@
         </div>
       </div>
 
-      <!-- Larger Summary text area -->
+      <!-- Summary text area for book description -->
       <div class="form-group">
         <label for="summary">Summary</label>
         <textarea id="summary" v-model="book.summary" placeholder="Enter book summary" required></textarea>
@@ -51,6 +58,7 @@
       <!-- Hidden input for cover_image -->
       <input type="hidden" v-model="book.cover_image" />
 
+      <!-- Submit button for updating the book -->
       <button type="submit" class="submit-btn">Update Book</button>
     </form>
   </div>
@@ -74,10 +82,13 @@ export default {
     };
   },
   mounted() {
-    // Fetch the current book details
+    // Lifecycle hook to fetch the current book details when the component is mounted
     this.fetchBookDetails();
   },
   methods: {
+    /**
+     * Fetches the details of the book based on the provided bookId.
+     */
     async fetchBookDetails() {
       try {
         const token = this.$store.state.userToken; // Get the token from the Vuex store
@@ -99,6 +110,10 @@ export default {
         console.error("Error fetching book details:", error);
       }
     },
+
+    /**
+     * Updates the book details by sending the updated data to the API.
+     */
     async updateBook() {
       try {
         // Ensure all required fields are populated
@@ -133,7 +148,7 @@ export default {
 </script>
 
 <style scoped>
-
+/* Styles for the add/update book form container */
 .add-book-form {
   background: white;
   padding: .5rem 1.25rem 0 1.25rem;
@@ -146,16 +161,19 @@ export default {
   z-index: 10;
 }
 
+/* Styles for the heading of the form */
 h2 {
   margin: 0;
 }
 
+/* Header styles containing the title and close button */
 .form-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
+/* Styles for the close button */
 .close-btn {
   background: none;
   border: none;
@@ -164,27 +182,31 @@ h2 {
   color: gray;
 }
 
-/* Flexbox for rows */
+/* Flexbox styles for form rows */
 .form-row {
   display: flex;
   justify-content: space-between;
   margin-bottom: .938rem;
 }
 
+/* Styles for individual form groups */
 .form-group {
   flex: 1;
 }
 
+/* Remove right margin for the last form group */
 .form-group:last-child {
   margin-right: 0;
 }
 
+/* Styles for labels within form groups */
 .form-group label {
   display: block;
   margin-bottom: .313rem;
   font-weight: bold;
 }
 
+/* Styles for input fields, select dropdowns, and text areas */
 .form-group input,
 .form-group select,
 .form-group textarea {
@@ -194,27 +216,29 @@ h2 {
   font-size: 1rem;
 }
 
+/* Specific width adjustments for different input types */
 [id="author"] {
   width: 92%;
 }
-
 [id="title"], [id="price"] {
   width: 80%;
 }
-
 .form-group textarea, [id="isbn"] {
   width: 96%;
 }
 
+/* Margin for the textarea */
 .form-group textarea {
   margin-bottom: .4rem;
 }
 
+/* Styles for select dropdowns */
 .form-group select {
   width: 100%;
   color: #434343;
 }
 
+/* Placeholder styles for inputs */
 .form-group input::placeholder,
 .form-group select::placeholder,
 .form-group textarea::placeholder,
@@ -223,6 +247,7 @@ h2 {
   font-family: Arial, sans-serif;
 }
 
+/* Styles for the submit button */
 .submit-btn {
   padding: .625rem 1.25rem;
   background-color: #a6a5a5;
@@ -234,26 +259,31 @@ h2 {
   margin-bottom: .7rem;
 }
 
+/* Hover effect for the submit button */
 .submit-btn:hover {
   background-color: #45a049;
 }
 
+/* Responsive styles for mobile devices */
 @media (max-width: 540px) {
-
+  /* Adjust heading padding on smaller screens */
   h2 {
     padding: .1rem 0 .625rem 0;
   }
 
+  /* Adjust form row layout for mobile */
   .form-row {
     display: flex;
     flex-direction: column;
     margin-bottom: 0;
   }
 
+  /* Styles for form groups on mobile */
   .form-group {
     margin-bottom: 0.4rem;
   }
 
+  /* Adjust input styles for mobile */
   .form-group input,
   .form-group select,
   .form-group textarea {
@@ -261,6 +291,7 @@ h2 {
     font-size: .9rem;
   }
 
+  /* Width adjustments for various inputs */
   .form-group textarea,
   [id="isbn"],
   [id="title"],
@@ -269,11 +300,13 @@ h2 {
     width: 92%;
   }
 
+  /* Adjust height for textarea */
   .form-group textarea {
     margin-bottom: 0;
     height: 1.1rem;
   }
 
+  /* Adjust padding and font size for submit button */
   .submit-btn {
     padding: .5rem 1rem;
     font-size: .9rem;

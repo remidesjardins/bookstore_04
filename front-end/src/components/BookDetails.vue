@@ -16,15 +16,19 @@
 
       <!-- Right content: Summary -->
       <div class="summary-button">
-        <h3>Summary</h3>
-        <p>{{ book.summary }}</p>
-        <button
-            class="add-favorite"
-            @click="toggleFavorite(book.book_id)"
-            :class="book.isFavorite ? 'favorite-added' : ''"
-        >
-          {{ book.isFavorite ? "Remove from Favorites" : "Add to Favorites" }}
-        </button>
+        <div>
+          <h3>Summary</h3>
+          <p>{{ book.summary }}</p>
+        </div>
+        <div>
+          <button
+              class="add-favorite"
+              @click="toggleFavorite(book.book_id)"
+              :class="book.isFavorite ? 'favorite-added' : ''"
+          >
+            {{ book.isFavorite ? "Remove from Favorites" : "Add to Favorites" }}
+          </button>
+        </div>
       </div>
 
       <!-- Action icons (Modify and Delete) -->
@@ -305,6 +309,10 @@ export default {
 .summary-button {
   width: 70%;
   padding-right: 2rem;
+  height: 25rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 .summary-button p {
@@ -362,7 +370,7 @@ export default {
   color: darkred;
 }
 
-@media (max-width: 600px) {
+@media (max-width: 680px) {
 
   .left-content {
     padding: 0;
@@ -397,6 +405,7 @@ export default {
   .summary-button {
     padding-right: 1rem;
     padding-left: 3rem;
+    height: 25rem;
   }
 
   .summary-button p {
@@ -412,6 +421,12 @@ export default {
 
   .icon-button {
     font-size: 1.3rem;
+  }
+
+  .bottom-right-buttons {
+    gap: 0;
+    display: flex;
+    flex-direction: row;
   }
 }
 

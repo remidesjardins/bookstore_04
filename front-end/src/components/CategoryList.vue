@@ -3,20 +3,23 @@
   Created by: Alexandre Borny, Maël Castellan, Laura Donato, and Rémi Desjardins
 -->
 <template>
-  <div class="categories-section">
-    <!--<h2>Categories</h2>-->
-    <button @click="slideLeft">‹</button>
-    <div class="categories" ref="categorieSlider">
-      <div
-          class="category"
-          v-for="category in categories"
-          :key="category"
-          @click="$emit('selectCategory', category)"
-      >
-        <h2>{{ category }}</h2>
+  <div>
+    <h2>Categories</h2>
+    <div class="categories-section">
+      <!--<h2>Categories</h2>-->
+      <button @click="slideLeft">‹</button>
+      <div class="categories" ref="categorieSlider">
+        <div
+            class="category"
+            v-for="category in categories"
+            :key="category"
+            @click="$emit('selectCategory', category)"
+        >
+          <h2>{{ category }}</h2>
+        </div>
       </div>
+      <button @click="slideRight">›</button>
     </div>
-    <button @click="slideRight">›</button>
   </div>
 
 </template>

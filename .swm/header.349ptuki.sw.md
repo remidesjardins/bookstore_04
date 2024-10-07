@@ -3,6 +3,8 @@ title: Header
 ---
 # Introduction
 
+Path : <SwmPath>[front-end/src/components/Header.vue](/front-end/src/components/Header.vue)</SwmPath>
+
 This document will walk you through the implementation of the header component in our front-end application.
 
 The header component provides navigation and search functionalities. It includes a logo, a hamburger menu for mobile view, and various navigation icons.
@@ -15,7 +17,7 @@ We will cover:
 
 # Structure of the header component
 
-The header component is defined in <SwmPath>[front-end/src/components/Header.vue](/front-end/src/components/Header.vue)</SwmPath>. It includes a logo, a hamburger menu, a search bar, and navigation icons.
+The header includes a logo, a hamburger menu, a search bar, and navigation icons.
 
 <SwmSnippet path="/front-end/src/components/Header.vue" line="5">
 

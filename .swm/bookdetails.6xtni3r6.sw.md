@@ -3,6 +3,8 @@ title: BookDetails
 ---
 # Introduction
 
+Path : <SwmPath>[front-end/src/components/BookDetails.vue](/front-end/src/components/BookDetails.vue)</SwmPath>
+
 This document will walk you through the implementation of the BookDetails feature.
 
 The feature displays detailed information about a book, including its cover image, author, price, and summary. It also allows users to add or remove the book from their favorites, and for admins, it provides options to update or delete the book.

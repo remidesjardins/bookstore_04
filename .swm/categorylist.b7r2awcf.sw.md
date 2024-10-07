@@ -3,6 +3,8 @@ title: CategoryList
 ---
 # Introduction
 
+Path : <SwmPath>[front-end/src/components/CategoryList.vue](/front-end/src/components/CategoryList.vue)</SwmPath>
+
 This document will walk you through the implementation of the CategoryList feature.
 
 The feature allows users to view and select categories in a scrollable list.

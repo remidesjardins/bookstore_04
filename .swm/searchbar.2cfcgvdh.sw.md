@@ -3,6 +3,8 @@ title: SearchBar
 ---
 # Introduction
 
+Path : <SwmPath>[front-end/src/components/SearchBar.vue](/front-end/src/components/SearchBar.vue)</SwmPath>
+
 This document will walk you through the implementation of the <SwmToken path="/front-end/src/components/SearchBar.vue" pos="35:8:8" line-data="      console.log(&quot;Test SearchBar&quot;);">`SearchBar`</SwmToken> feature.
 
 The feature allows users to search for books by title or ID.

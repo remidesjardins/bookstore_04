@@ -3,6 +3,8 @@ title: UpdateBookForm
 ---
 # Introduction
 
+Path : <SwmPath>[front-end/src/components/UpdateBookForm.vue](/front-end/src/components/UpdateBookForm.vue)</SwmPath>
+
 This document will walk you through the implementation of the UpdateBookForm feature.
 
 The feature allows users to update book details through a form. We will cover:
@@ -13,7 +15,7 @@ The feature allows users to update book details through a form. We will cover:
 
 # Form structure
 
-The form is defined in <SwmPath>[front-end/src/components/UpdateBookForm.vue](/front-end/src/components/UpdateBookForm.vue)</SwmPath>. It includes fields for ISBN, title, author, price, category, and summary. The form also has a submit button to update the book details.
+The form includes fields for ISBN, title, author, price, category, and summary. The form also has a submit button to update the book details.
 
 <SwmSnippet path="/front-end/src/components/UpdateBookForm.vue" line="5">
 

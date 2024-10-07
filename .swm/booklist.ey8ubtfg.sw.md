@@ -3,6 +3,8 @@ title: BookList
 ---
 # Introduction
 
+Path : <SwmPath>[front-end/src/components/BookList.vue](/front-end/src/components/BookList.vue)</SwmPath>
+
 This document will walk you through the implementation of the <SwmToken path="/front-end/src/components/BookList.vue" pos="12:13:13" line-data="          &lt;div v-for=&quot;book in bookList&quot; :key=&quot;book.book_id&quot; class=&quot;book&quot; @click=&quot;selectBook(book)&quot;&gt;">`bookList`</SwmToken> feature.
 
 The feature displays a list of books, allows users to mark books as favorites, and fetches book cover images.

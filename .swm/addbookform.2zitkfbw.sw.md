@@ -3,6 +3,8 @@ title: AddBookForm
 ---
 # Introduction
 
+Path : <SwmPath>[front-end/src/components/AddBookForm.vue](/front-end/src/components/AddBookForm.vue)</SwmPath>
+
 This document will walk you through the implementation of the AddBookForm feature.
 
 The feature allows users to add new books to the system by filling out a form. It includes automatic fetching of book details using the Google Books API based on the ISBN, and submission of the form data to a backend API.

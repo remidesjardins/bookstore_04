@@ -173,6 +173,9 @@ The <SwmToken path="/front-end/src/components/AddBookForm.vue" pos="67:1:1" line
 
 The <SwmToken path="/front-end/src/components/AddBookForm.vue" pos="90:3:3" line-data="    async fetchBookDetails() {">`fetchBookDetails`</SwmToken> method fetches book details from the Google Books API using the ISBN entered by the user. It automatically populates the form with the retrieved details like title, author, category, summary, and cover image. If no details are found or if there's an error, it logs the error in the console.
 
+@async\
+@returns {Promise<void>} Resolves when the book details are fetched and the form is updated.
+
 ```
     /**
      * Fetches book details from the Google Books API using the book's ISBN.
@@ -216,6 +219,9 @@ The <SwmToken path="/front-end/src/components/AddBookForm.vue" pos="90:3:3" line
 ---
 
 The <SwmToken path="/front-end/src/components/AddBookForm.vue" pos="120:3:3" line-data="    async submitForm() { // Submit form data to the backend API">`submitForm`</SwmToken> method submits the book form data to the backend API to add a new book. It sends a POST request to the backend with the book details and the user's authorization token. If successful, an alert confirms the book was added, the form is reset, and the form is closed. If there's an error, an alert displays the error message.
+
+@async\
+@returns {Promise<void>} Resolves when the form data is submitted successfully.
 
 ```
     /**

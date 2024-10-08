@@ -96,17 +96,6 @@ export default {
     border: .125rem solid blue;
   }
 
-/* Label styling for category, with rounded corners and padding */
-  .category-label {
-    background-color: orange;
-    border-radius: .625rem;
-    padding: .313rem .625rem;
-    margin-bottom: 1.25rem;
-    color: white;
-    font-weight: bold;
-    font-size: 1rem;
-  }
-
 /* Heading styling for the categories section */
   .categories h2{
     font-size: 2rem;

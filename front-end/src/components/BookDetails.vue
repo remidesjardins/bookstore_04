@@ -378,12 +378,6 @@ export default {
   margin-top: .625rem;
 }
 
-/* Styles for the button when favorite is added */
-.favorite-added {
-  background-color: #d9a05b;
-  color: black;
-}
-
 /* Summary button styles */
 .summary-button {
   width: 70%;

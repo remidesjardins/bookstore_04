@@ -207,31 +207,35 @@ export default {
         return this.coverCache[isbn]; // Use cached cover if available
       }
 
-      const googleBooksAPI = `https://www.googleapis.com/books/v1/volumes?q=isbn:${isbn}`;
-      fetch(googleBooksAPI)
-          .then((response) => response.json())
-          .then((data) => {
-            if (data.totalItems > 0 && data.items[0].volumeInfo.imageLinks) {
-              const imageUrl =
-                  data.items[0].volumeInfo.imageLinks.thumbnail ||
-                  data.items[0].volumeInfo.imageLinks.smallThumbnail;
-              this.coverCache[isbn] = imageUrl; // Cache the fetched cover image
-              const book = this.bookList.find((b) => b.isbn === isbn);
-              if (book) {
-                book.coverImage = imageUrl; // Update the book with the cover
+      const googleBooksAPI = `https://www.googleapis.com/books/v1/volumes?q=isbn:${isbn}&key=AIzaSyB7cwO5XxLItxOpqno3sq4kt9_qpebT6Js`;
+
+      // Add a delay between each API call
+      setTimeout(() => {
+        fetch(googleBooksAPI)
+            .then((response) => response.json())
+            .then((data) => {
+              if (data.totalItems > 0 && data.items[0].volumeInfo.imageLinks) {
+                const imageUrl =
+                    data.items[0].volumeInfo.imageLinks.thumbnail ||
+                    data.items[0].volumeInfo.imageLinks.smallThumbnail;
+                this.coverCache[isbn] = imageUrl; // Cache the fetched cover image
+                const book = this.bookList.find((b) => b.isbn === isbn);
+                if (book) {
+                  book.coverImage = imageUrl; // Update the book with the cover
+                }
+              } else {
+                this.coverCache[isbn] = "https://via.placeholder.com/150?text=No+Cover";
+                const book = this.bookList.find((b) => b.isbn === isbn);
+                if (book) {
+                  book.coverImage = "https://via.placeholder.com/150?text=No+Cover";
+                }
               }
-            } else {
+            })
+            .catch((error) => {
+              console.error("Error fetching the book cover:", error);
               this.coverCache[isbn] = "https://via.placeholder.com/150?text=No+Cover";
-              const book = this.bookList.find((b) => b.isbn === isbn);
-              if (book) {
-                book.coverImage = "https://via.placeholder.com/150?text=No+Cover";
-              }
-            }
-          })
-          .catch((error) => {
-            console.error("Error fetching the book cover:", error);
-            this.coverCache[isbn] = "https://via.placeholder.com/150?text=No+Cover";
-          });
+            });
+      }, 1000); // Throttle API requests by 1 second between each call
 
       return "https://via.placeholder.com/150?text=No+Cover"; // Return placeholder while fetching
     },

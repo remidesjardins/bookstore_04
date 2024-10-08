@@ -1,20 +1,21 @@
 # Utiliser une image de base avec Node.js
+#Use a base image with Node.js
 FROM node:18
 
-# Créer un répertoire de travail
+# Create a work repository
 WORKDIR /app
 
-# Copier les fichiers du projet dans le conteneur
+# Copy the project files in the container
 COPY package*.json ./
 
-# Installer les dépendances
+# Install dependencies
 RUN npm install
 
-# Copier le reste des fichiers du projet
+# Copy the rest of the project files
 COPY . .
 
-# Exposer le port sur lequel votre application s'exécute
+# Expose the port on which the application run
 EXPOSE 10010
 
-# Commande pour démarrer votre application
+# Command to start the application
 CMD ["node", "server.js"]

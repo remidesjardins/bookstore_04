@@ -23,7 +23,7 @@ exports.admin = (req, res, next) => {
     if (req.auth.role !== 'ADMIN') {
         return res.status(403).json({ message: 'Accès interdit : Admin requis' });
     }
-    next(); // Si l'utilisateur est admin, on passe au middleware suivant
+    next(); // If the user is admin, we pass to the next middleware
 };
 
 // Middleware pour les routes utilisateur
@@ -31,5 +31,5 @@ exports.user = (req, res, next) => {
     if (req.auth.role !== 'USER' && req.auth.role !== 'ADMIN') {
         return res.status(403).json({ message: 'Accès interdit : Utilisateur requis' });
     }
-    next(); // Si l'utilisateur est user ou admin, on passe au middleware suivant
+    next(); // If the user is admin or user, we pass to the next middleware
 };

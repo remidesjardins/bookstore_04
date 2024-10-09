@@ -5,8 +5,7 @@
 <template>
   <div>
     <!-- Header component with search functionality -->
-    <Header :searchQuery="searchQuery" @search="handleSearch" />
-
+    <Header :searchQuery="searchQuery" @search="handleSearch" @showAddBookForm="showAddBookForm" />
     <!-- BookList component that displays the list of filtered books -->
     <BookList
         :bookList="filteredBooks"
@@ -28,6 +27,11 @@
         @close="closeDetails"
         @favoriteToggled="toggleFavorite"
     />
+
+    <div v-if="isAddBookFormVisible" class="overlay">
+      <AddBookForm @close-form="hideAddBookForm" @add-book="addBook" />
+    </div>
+
   </div>
 </template>
 
@@ -37,6 +41,7 @@ import BookList from "../components/BookList.vue";
 import BookDetails from "../components/BookDetails.vue";
 import CategoryList  from "@/components/CategoryList.vue";
 import CategoryBookList from "../views/CategoryBookList.vue";
+import AddBookForm from "@/components/AddBookForm.vue";
 
 export default {
   data() {
@@ -47,8 +52,7 @@ export default {
       selectedCategory: '',
       category: '',
       categories: ["Science Fiction", "Mystery & Thriller", "Children's books", "Historical", "Educational"],
-
-
+      isAddBookFormVisible: false,
     };
   },
   computed: {
@@ -147,6 +151,25 @@ export default {
         }
       });
     },
+    /**
+     * Shows the form to add a new book.
+     */
+    showAddBookForm(){
+      this.isAddBookFormVisible = true;
+    },
+    /**
+     * Hides the add book form.
+     */
+    hideAddBookForm() {
+      this.isAddBookFormVisible = false;
+    },
+    /**
+     * Adds a new book to the books array.
+     * @param {Object} newBook - The new book to be added.
+     */
+    addBook(newBook) {
+      this.books.push(newBook);
+    },
   },
   mounted() {
     // Fetch favorite books if the user ID is available
@@ -165,6 +188,7 @@ export default {
     }
   },
   components: {
+    AddBookForm,
     Header,
     BookList,
     BookDetails,
@@ -229,5 +253,19 @@ input[type="text"] {
 .header-icons .icon {
   margin-left: .313rem;
   font-size: 1.875rem;
+}
+/* Overlay styles for forms and modals */
+.overlay {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: fixed;
+  border-radius: 1.875rem;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 999;
 }
 </style>
